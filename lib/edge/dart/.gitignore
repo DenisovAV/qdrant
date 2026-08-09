@@ -1,9 +1,19 @@
 # Dart tooling
 /.dart_tool/
 /example/.dart_tool/
+/build/
 .packages
 pubspec.lock
 example/pubspec.lock
+
+# Prebuilt native cdylibs: per-platform build outputs (25–30 MB each), produced
+# on demand by hook/build.dart's source path, by the device CI, or (for a
+# release) a download step. A local cache, never committed.
+/native/prebuilt/
+
+# e2e harness (Flutter app): commit app sources + integration_test, ignore the
+# app-local resolved lockfile.
+/e2e/pubspec.lock
 
 # The generated UniFFI binding at lib/src/qdrant_edge_ffi.dart is COMMITTED (it is
 # the shippable artifact and consumers must not need the Rust toolchain to depend
