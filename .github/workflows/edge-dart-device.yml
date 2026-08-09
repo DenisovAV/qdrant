@@ -1,0 +1,170 @@
+name: Qdrant Edge Dart SDK — device matrix
+
+# Runs the full-surface operation suite (e2e/integration_test/operations_test.dart)
+# on real device runtimes, proving the SDK's ~20 EdgeShard methods + query/filter/
+# vector variants work on each platform — not just host `dart test`.
+#
+# Desktop (macOS/Windows/Linux) uses the hook's from-source path (nightly Rust +
+# protobuf build the host engine). iOS Simulator and the Android emulator use the
+# hook's prebuilt path: we cross-build the cdylib and drop it into
+# lib/edge/dart/native/prebuilt/<os_arch>/ before running.
+
+on:
+  push:
+    branches: [ master, dev ]
+    paths:
+      - 'lib/edge/ffi/**'
+      - 'lib/edge/src/**'
+      - 'lib/edge/dart/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.github/workflows/edge-dart-device.yml'
+  pull_request:
+    branches: [ '**' ]
+    paths:
+      - 'lib/edge/ffi/**'
+      - 'lib/edge/src/**'
+      - 'lib/edge/dart/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.github/workflows/edge-dart-device.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CRATE: qdrant-edge-ffi
+  LIB_BASENAME: qdrant_edge_ffi
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Desktop: the from-source hook builds the host engine during `flutter test`.
+  desktop:
+    name: desktop (${{ matrix.device }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: macos-latest,   device: macos }
+          - { os: windows-latest, device: windows }
+          - { os: ubuntu-latest,  device: linux }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+
+      - name: Install Rust nightly
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Install Protoc
+        uses: ./.github/actions/setup-protoc
+
+      - name: Linux desktop deps
+        if: matrix.device == 'linux'
+        run: sudo apt-get update && sudo apt-get install -y ninja-build libgtk-3-dev
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with: { channel: stable }
+
+      - name: Enable native assets + desktop
+        run: |
+          flutter config --enable-native-assets
+          flutter config --enable-${{ matrix.device }}-desktop
+
+      - name: Run operation suite on ${{ matrix.device }}
+        working-directory: lib/edge/dart/e2e
+        run: |
+          flutter pub get
+          flutter test integration_test/operations_test.dart -d ${{ matrix.device }}
+
+  # ---------------------------------------------------------------------------
+  # iOS Simulator: cross-build the sim slice, register it via the prebuilt path.
+  ios:
+    name: ios-simulator
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+
+      - name: Install Rust nightly (+ iOS-sim target)
+        uses: dtolnay/rust-toolchain@nightly
+        with: { targets: aarch64-apple-ios-sim }
+
+      - name: Install Protoc
+        uses: ./.github/actions/setup-protoc
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with: { channel: stable }
+
+      - name: Cross-build iOS-sim cdylib
+        run: |
+          cargo +nightly build --locked --no-default-features --release \
+            --target aarch64-apple-ios-sim -p "$CRATE"
+          dst=lib/edge/dart/native/prebuilt/ios_sim_arm64
+          mkdir -p "$dst"
+          cp "target/aarch64-apple-ios-sim/release/lib${LIB_BASENAME}.dylib" "$dst/"
+
+      - name: Boot a simulator
+        run: |
+          udid=$(xcrun simctl list devices available | grep -m1 -oE '[0-9A-F-]{36}')
+          xcrun simctl boot "$udid" || true
+          echo "SIM_UDID=$udid" >> "$GITHUB_ENV"
+
+      - name: Run operation suite on iOS Simulator
+        working-directory: lib/edge/dart/e2e
+        run: |
+          flutter config --enable-native-assets
+          flutter pub get
+          flutter test integration_test/operations_test.dart -d "$SIM_UDID"
+
+  # ---------------------------------------------------------------------------
+  # Android emulator (x86_64, KVM on Linux runners): cross-build the .so.
+  android:
+    name: android-emulator
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+
+      - name: Install Rust nightly (+ Android target)
+        uses: dtolnay/rust-toolchain@nightly
+        with: { targets: x86_64-linux-android }
+
+      - name: Install cargo-ndk
+        run: cargo install cargo-ndk --locked
+
+      - name: Install Protoc
+        uses: ./.github/actions/setup-protoc
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with: { channel: stable }
+
+      - name: Cross-build Android x86_64 .so
+        env:
+          ANDROID_NDK_HOME: ${{ env.ANDROID_NDK_LATEST_HOME }}
+        run: |
+          cargo +nightly ndk -t x86_64 build --locked --no-default-features --release -p "$CRATE"
+          dst=lib/edge/dart/native/prebuilt/android_x86_64
+          mkdir -p "$dst"
+          cp "target/x86_64-linux-android/release/lib${LIB_BASENAME}.so" "$dst/"
+
+      - name: Run operation suite on Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          force-avd-creation: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          script: |
+            flutter config --enable-native-assets
+            (cd lib/edge/dart/e2e && flutter pub get && flutter test integration_test/operations_test.dart -d emulator-5554)
