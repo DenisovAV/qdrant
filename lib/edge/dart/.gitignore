@@ -1,0 +1,10 @@
+# Dart tooling
+/.dart_tool/
+/example/.dart_tool/
+.packages
+pubspec.lock
+example/pubspec.lock
+
+# The generated UniFFI binding at lib/src/qdrant_edge_ffi.dart is COMMITTED (it is
+# the shippable artifact and consumers must not need the Rust toolchain to depend
+# on the package). Regenerate it with ./build.sh after changing the FFI crate.
