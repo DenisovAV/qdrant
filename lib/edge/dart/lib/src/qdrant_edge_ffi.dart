@@ -12,6 +12,7 @@ class BinaryQuantizationParams {
   final Memory? memory;
   final BinaryQuantizationEncoding? encoding;
   final BinaryQuantizationQueryEncoding? queryEncoding;
+
   BinaryQuantizationParams({
     this.memory = null,
     this.encoding = null,
@@ -26,6 +27,7 @@ class FfiConverterBinaryQuantizationParams {
 
   static LiftRetVal<BinaryQuantizationParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final memory_lifted = FfiConverterOptionalMemory.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -69,6 +71,7 @@ class FfiConverterBinaryQuantizationParams {
 
   static int write(BinaryQuantizationParams value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalMemory.write(
       value.memory,
       Uint8List.view(buf.buffer, new_offset),
@@ -99,6 +102,7 @@ class FfiConverterBinaryQuantizationParams {
 class EdgeConfig {
   final Map<String, VectorDataConfig> vectorData;
   final Map<String, SparseVectorDataConfig> sparseVectorData;
+
   EdgeConfig({required this.vectorData, this.sparseVectorData = const {}});
 }
 
@@ -109,6 +113,7 @@ class FfiConverterEdgeConfig {
 
   static LiftRetVal<EdgeConfig> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final vectorData_lifted = FfiConverterMapStringToVectorDataConfig.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -142,6 +147,7 @@ class FfiConverterEdgeConfig {
 
   static int write(EdgeConfig value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterMapStringToVectorDataConfig.write(
       value.vectorData,
       Uint8List.view(buf.buffer, new_offset),
@@ -171,6 +177,7 @@ class HnswIndexConfig {
   final int maxIndexingThreads;
   final Memory? memory;
   final int? payloadM;
+
   HnswIndexConfig({
     this.m = 16,
     this.efConstruct = 100,
@@ -188,6 +195,7 @@ class FfiConverterHnswIndexConfig {
 
   static LiftRetVal<HnswIndexConfig> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final m_lifted = FfiConverterUInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -247,6 +255,7 @@ class FfiConverterHnswIndexConfig {
 
   static int write(HnswIndexConfig value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterUInt64.write(
       value.m,
       Uint8List.view(buf.buffer, new_offset),
@@ -287,6 +296,7 @@ class FfiConverterHnswIndexConfig {
 
 class MultiVectorConfig {
   final MultiVectorComparator comparator;
+
   MultiVectorConfig({required this.comparator});
 }
 
@@ -297,6 +307,7 @@ class FfiConverterMultiVectorConfig {
 
   static LiftRetVal<MultiVectorConfig> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final comparator_lifted = FfiConverterMultiVectorComparator.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -318,6 +329,7 @@ class FfiConverterMultiVectorConfig {
 
   static int write(MultiVectorConfig value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterMultiVectorComparator.write(
       value.comparator,
       Uint8List.view(buf.buffer, new_offset),
@@ -338,6 +350,7 @@ class OptimizersConfig {
   final int? maxSegmentSizeKb;
   final int? indexingThresholdKb;
   final bool? preventUnoptimized;
+
   OptimizersConfig({
     this.deletedThreshold = null,
     this.vacuumMinVectorNumber = null,
@@ -355,6 +368,7 @@ class FfiConverterOptimizersConfig {
 
   static LiftRetVal<OptimizersConfig> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final deletedThreshold_lifted = FfiConverterOptionalDouble64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -414,6 +428,7 @@ class FfiConverterOptimizersConfig {
 
   static int write(OptimizersConfig value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalDouble64.write(
       value.deletedThreshold,
       Uint8List.view(buf.buffer, new_offset),
@@ -455,6 +470,7 @@ class FfiConverterOptimizersConfig {
 class ProductQuantizationParams {
   final CompressionRatio compression;
   final Memory? memory;
+
   ProductQuantizationParams({required this.compression, this.memory = null});
 }
 
@@ -465,6 +481,7 @@ class FfiConverterProductQuantizationParams {
 
   static LiftRetVal<ProductQuantizationParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final compression_lifted = FfiConverterCompressionRatio.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -493,6 +510,7 @@ class FfiConverterProductQuantizationParams {
 
   static int write(ProductQuantizationParams value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterCompressionRatio.write(
       value.compression,
       Uint8List.view(buf.buffer, new_offset),
@@ -515,6 +533,7 @@ class ScalarQuantizationParams {
   final ScalarType type;
   final double? quantile;
   final Memory? memory;
+
   ScalarQuantizationParams({
     required this.type,
     this.quantile = null,
@@ -529,6 +548,7 @@ class FfiConverterScalarQuantizationParams {
 
   static LiftRetVal<ScalarQuantizationParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final type_lifted = FfiConverterScalarType.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -563,6 +583,7 @@ class FfiConverterScalarQuantizationParams {
 
   static int write(ScalarQuantizationParams value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterScalarType.write(
       value.type,
       Uint8List.view(buf.buffer, new_offset),
@@ -590,6 +611,7 @@ class SparseVectorDataConfig {
   final int? fullScanThreshold;
   final VectorStorageDatatype? datatype;
   final Modifier? modifier;
+
   SparseVectorDataConfig({
     this.fullScanThreshold = null,
     this.datatype = null,
@@ -604,6 +626,7 @@ class FfiConverterSparseVectorDataConfig {
 
   static LiftRetVal<SparseVectorDataConfig> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final fullScanThreshold_lifted = FfiConverterOptionalUInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -644,6 +667,7 @@ class FfiConverterSparseVectorDataConfig {
 
   static int write(SparseVectorDataConfig value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalUInt64.write(
       value.fullScanThreshold,
       Uint8List.view(buf.buffer, new_offset),
@@ -672,6 +696,7 @@ class FfiConverterSparseVectorDataConfig {
 class TurboQuantizationParams {
   final Memory? memory;
   final TurboQuantBitSize? bits;
+
   TurboQuantizationParams({this.memory = null, this.bits = null});
 }
 
@@ -682,6 +707,7 @@ class FfiConverterTurboQuantizationParams {
 
   static LiftRetVal<TurboQuantizationParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final memory_lifted = FfiConverterOptionalMemory.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -710,6 +736,7 @@ class FfiConverterTurboQuantizationParams {
 
   static int write(TurboQuantizationParams value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalMemory.write(
       value.memory,
       Uint8List.view(buf.buffer, new_offset),
@@ -735,6 +762,7 @@ class VectorDataConfig {
   final MultiVectorConfig? multivectorConfig;
   final VectorStorageDatatype? datatype;
   final HnswIndexConfig? hnswConfig;
+
   VectorDataConfig({
     required this.size,
     required this.distance,
@@ -752,6 +780,7 @@ class FfiConverterVectorDataConfig {
 
   static LiftRetVal<VectorDataConfig> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final size_lifted = FfiConverterUInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -818,6 +847,7 @@ class FfiConverterVectorDataConfig {
 
   static int write(VectorDataConfig value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterUInt64.write(
       value.size,
       Uint8List.view(buf.buffer, new_offset),
@@ -871,6 +901,7 @@ class FieldCondition {
   final GeoRadius? geoRadius;
   final GeoPolygon? geoPolygon;
   final ValuesCount? valuesCount;
+
   FieldCondition({
     required this.key,
     this.match = null,
@@ -890,6 +921,7 @@ class FfiConverterFieldCondition {
 
   static LiftRetVal<FieldCondition> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final key_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -965,6 +997,7 @@ class FfiConverterFieldCondition {
 
   static int write(FieldCondition value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterString.write(
       value.key,
       Uint8List.view(buf.buffer, new_offset),
@@ -1020,6 +1053,7 @@ class Filter {
   final List<Condition>? should;
   final List<Condition>? mustNot;
   final MinShould? minShould;
+
   Filter({
     this.must = null,
     this.should = null,
@@ -1035,6 +1069,7 @@ class FfiConverterFilter {
 
   static LiftRetVal<Filter> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final must_lifted = FfiConverterOptionalSequenceCondition.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1080,6 +1115,7 @@ class FfiConverterFilter {
 
   static int write(Filter value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalSequenceCondition.write(
       value.must,
       Uint8List.view(buf.buffer, new_offset),
@@ -1111,6 +1147,7 @@ class FfiConverterFilter {
 class GeoBoundingBox {
   final GeoPoint topLeft;
   final GeoPoint bottomRight;
+
   GeoBoundingBox({required this.topLeft, required this.bottomRight});
 }
 
@@ -1121,6 +1158,7 @@ class FfiConverterGeoBoundingBox {
 
   static LiftRetVal<GeoBoundingBox> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final topLeft_lifted = FfiConverterGeoPoint.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1149,6 +1187,7 @@ class FfiConverterGeoBoundingBox {
 
   static int write(GeoBoundingBox value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterGeoPoint.write(
       value.topLeft,
       Uint8List.view(buf.buffer, new_offset),
@@ -1169,6 +1208,7 @@ class FfiConverterGeoBoundingBox {
 
 class GeoLineString {
   final List<GeoPoint> points;
+
   GeoLineString({required this.points});
 }
 
@@ -1179,6 +1219,7 @@ class FfiConverterGeoLineString {
 
   static LiftRetVal<GeoLineString> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final points_lifted = FfiConverterSequenceGeoPoint.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1200,6 +1241,7 @@ class FfiConverterGeoLineString {
 
   static int write(GeoLineString value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterSequenceGeoPoint.write(
       value.points,
       Uint8List.view(buf.buffer, new_offset),
@@ -1215,6 +1257,7 @@ class FfiConverterGeoLineString {
 class GeoPoint {
   final double lon;
   final double lat;
+
   GeoPoint({required this.lon, required this.lat});
 }
 
@@ -1225,6 +1268,7 @@ class FfiConverterGeoPoint {
 
   static LiftRetVal<GeoPoint> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final lon_lifted = FfiConverterDouble64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1253,6 +1297,7 @@ class FfiConverterGeoPoint {
 
   static int write(GeoPoint value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterDouble64.write(
       value.lon,
       Uint8List.view(buf.buffer, new_offset),
@@ -1274,6 +1319,7 @@ class FfiConverterGeoPoint {
 class GeoPolygon {
   final GeoLineString exterior;
   final List<GeoLineString>? interiors;
+
   GeoPolygon({required this.exterior, this.interiors = null});
 }
 
@@ -1284,6 +1330,7 @@ class FfiConverterGeoPolygon {
 
   static LiftRetVal<GeoPolygon> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final exterior_lifted = FfiConverterGeoLineString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1314,6 +1361,7 @@ class FfiConverterGeoPolygon {
 
   static int write(GeoPolygon value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterGeoLineString.write(
       value.exterior,
       Uint8List.view(buf.buffer, new_offset),
@@ -1337,6 +1385,7 @@ class FfiConverterGeoPolygon {
 class GeoRadius {
   final GeoPoint center;
   final double radius;
+
   GeoRadius({required this.center, required this.radius});
 }
 
@@ -1347,6 +1396,7 @@ class FfiConverterGeoRadius {
 
   static LiftRetVal<GeoRadius> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final center_lifted = FfiConverterGeoPoint.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1375,6 +1425,7 @@ class FfiConverterGeoRadius {
 
   static int write(GeoRadius value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterGeoPoint.write(
       value.center,
       Uint8List.view(buf.buffer, new_offset),
@@ -1396,6 +1447,7 @@ class FfiConverterGeoRadius {
 class MinShould {
   final List<Condition> conditions;
   final int minCount;
+
   MinShould({required this.conditions, required this.minCount});
 }
 
@@ -1406,6 +1458,7 @@ class FfiConverterMinShould {
 
   static LiftRetVal<MinShould> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final conditions_lifted = FfiConverterSequenceCondition.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1434,6 +1487,7 @@ class FfiConverterMinShould {
 
   static int write(MinShould value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterSequenceCondition.write(
       value.conditions,
       Uint8List.view(buf.buffer, new_offset),
@@ -1457,6 +1511,7 @@ class RangeDatetime {
   final String? gt;
   final String? lte;
   final String? lt;
+
   RangeDatetime({
     this.gte = null,
     this.gt = null,
@@ -1472,6 +1527,7 @@ class FfiConverterRangeDatetime {
 
   static LiftRetVal<RangeDatetime> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final gte_lifted = FfiConverterOptionalString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1512,6 +1568,7 @@ class FfiConverterRangeDatetime {
 
   static int write(RangeDatetime value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalString.write(
       value.gte,
       Uint8List.view(buf.buffer, new_offset),
@@ -1545,6 +1602,7 @@ class RangeFloat {
   final double? gt;
   final double? lte;
   final double? lt;
+
   RangeFloat({
     this.gte = null,
     this.gt = null,
@@ -1560,6 +1618,7 @@ class FfiConverterRangeFloat {
 
   static LiftRetVal<RangeFloat> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final gte_lifted = FfiConverterOptionalDouble64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1600,6 +1659,7 @@ class FfiConverterRangeFloat {
 
   static int write(RangeFloat value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalDouble64.write(
       value.gte,
       Uint8List.view(buf.buffer, new_offset),
@@ -1633,6 +1693,7 @@ class ValuesCount {
   final int? gt;
   final int? lte;
   final int? lt;
+
   ValuesCount({
     this.gte = null,
     this.gt = null,
@@ -1648,6 +1709,7 @@ class FfiConverterValuesCount {
 
   static LiftRetVal<ValuesCount> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final gte_lifted = FfiConverterOptionalUInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1688,6 +1750,7 @@ class FfiConverterValuesCount {
 
   static int write(ValuesCount value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalUInt64.write(
       value.gte,
       Uint8List.view(buf.buffer, new_offset),
@@ -1719,6 +1782,7 @@ class FfiConverterValuesCount {
 class CountRequest {
   final Filter? filter;
   final bool exact;
+
   CountRequest({this.filter = null, this.exact = true});
 }
 
@@ -1729,6 +1793,7 @@ class FfiConverterCountRequest {
 
   static LiftRetVal<CountRequest> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final filter_lifted = FfiConverterOptionalFilter.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1757,6 +1822,7 @@ class FfiConverterCountRequest {
 
   static int write(CountRequest value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalFilter.write(
       value.filter,
       Uint8List.view(buf.buffer, new_offset),
@@ -1778,6 +1844,7 @@ class FfiConverterCountRequest {
 class FacetHit {
   final String value;
   final int count;
+
   FacetHit({required this.value, required this.count});
 }
 
@@ -1788,6 +1855,7 @@ class FfiConverterFacetHit {
 
   static LiftRetVal<FacetHit> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1816,6 +1884,7 @@ class FfiConverterFacetHit {
 
   static int write(FacetHit value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterString.write(
       value.value,
       Uint8List.view(buf.buffer, new_offset),
@@ -1839,6 +1908,7 @@ class FacetRequest {
   final int limit;
   final bool exact;
   final Filter? filter;
+
   FacetRequest({
     required this.key,
     this.limit = 10,
@@ -1854,6 +1924,7 @@ class FfiConverterFacetRequest {
 
   static LiftRetVal<FacetRequest> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final key_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1894,6 +1965,7 @@ class FfiConverterFacetRequest {
 
   static int write(FacetRequest value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterString.write(
       value.key,
       Uint8List.view(buf.buffer, new_offset),
@@ -1924,6 +1996,7 @@ class FfiConverterFacetRequest {
 
 class FacetResponse {
   final List<FacetHit> hits;
+
   FacetResponse({required this.hits});
 }
 
@@ -1934,6 +2007,7 @@ class FfiConverterFacetResponse {
 
   static LiftRetVal<FacetResponse> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final hits_lifted = FfiConverterSequenceFacetHit.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -1955,6 +2029,7 @@ class FfiConverterFacetResponse {
 
   static int write(FacetResponse value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterSequenceFacetHit.write(
       value.hits,
       Uint8List.view(buf.buffer, new_offset),
@@ -1970,6 +2045,7 @@ class FfiConverterFacetResponse {
 class Group {
   final GroupId key;
   final List<ScoredPoint> hits;
+
   Group({required this.key, required this.hits});
 }
 
@@ -1980,6 +2056,7 @@ class FfiConverterGroup {
 
   static LiftRetVal<Group> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final key_lifted = FfiConverterGroupId.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -2008,6 +2085,7 @@ class FfiConverterGroup {
 
   static int write(Group value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterGroupId.write(
       value.key,
       Uint8List.view(buf.buffer, new_offset),
@@ -2031,6 +2109,7 @@ class GroupRequest {
   final String groupBy;
   final int groups;
   final int groupSize;
+
   GroupRequest({
     required this.query,
     required this.groupBy,
@@ -2046,6 +2125,7 @@ class FfiConverterGroupRequest {
 
   static LiftRetVal<GroupRequest> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final query_lifted = FfiConverterQueryRequest.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -2091,6 +2171,7 @@ class FfiConverterGroupRequest {
 
   static int write(GroupRequest value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterQueryRequest.write(
       value.query,
       Uint8List.view(buf.buffer, new_offset),
@@ -2124,6 +2205,7 @@ class ShardInfo {
   final int pointsCount;
   final int indexedVectorsCount;
   final Map<String, PayloadIndexInfo> payloadSchema;
+
   ShardInfo({
     required this.segmentsCount,
     required this.pointsCount,
@@ -2139,6 +2221,7 @@ class FfiConverterShardInfo {
 
   static LiftRetVal<ShardInfo> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final segmentsCount_lifted = FfiConverterUInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -2186,6 +2269,7 @@ class FfiConverterShardInfo {
 
   static int write(ShardInfo value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterUInt64.write(
       value.segmentsCount,
       Uint8List.view(buf.buffer, new_offset),
@@ -2216,161 +2300,10 @@ class FfiConverterShardInfo {
   }
 }
 
-class SearchMatrixRequest {
-  final int sampleSize;
-  final int limitPerSample;
-  final Filter? filter;
-  final String? using;
-  SearchMatrixRequest({
-    required this.sampleSize,
-    required this.limitPerSample,
-    this.filter = null,
-    this.using = null,
-  });
-}
-
-class FfiConverterSearchMatrixRequest {
-  static SearchMatrixRequest lift(RustBuffer buf) {
-    return FfiConverterSearchMatrixRequest.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<SearchMatrixRequest> read(Uint8List buf) {
-    int new_offset = buf.offsetInBytes;
-    final sampleSize_lifted = FfiConverterUInt64.read(
-      Uint8List.view(buf.buffer, new_offset),
-    );
-    final sampleSize = sampleSize_lifted.value;
-    new_offset += sampleSize_lifted.bytesRead;
-    final limitPerSample_lifted = FfiConverterUInt64.read(
-      Uint8List.view(buf.buffer, new_offset),
-    );
-    final limitPerSample = limitPerSample_lifted.value;
-    new_offset += limitPerSample_lifted.bytesRead;
-    final filter_lifted = FfiConverterOptionalFilter.read(
-      Uint8List.view(buf.buffer, new_offset),
-    );
-    final filter = filter_lifted.value;
-    new_offset += filter_lifted.bytesRead;
-    final using_lifted = FfiConverterOptionalString.read(
-      Uint8List.view(buf.buffer, new_offset),
-    );
-    final using = using_lifted.value;
-    new_offset += using_lifted.bytesRead;
-    return LiftRetVal(
-      SearchMatrixRequest(
-        sampleSize: sampleSize,
-        limitPerSample: limitPerSample,
-        filter: filter,
-        using: using,
-      ),
-      new_offset - buf.offsetInBytes,
-    );
-  }
-
-  static RustBuffer lower(SearchMatrixRequest value) {
-    final total_length =
-        FfiConverterUInt64.allocationSize(value.sampleSize) +
-        FfiConverterUInt64.allocationSize(value.limitPerSample) +
-        FfiConverterOptionalFilter.allocationSize(value.filter) +
-        FfiConverterOptionalString.allocationSize(value.using) +
-        0;
-    final buf = Uint8List(total_length);
-    write(value, buf);
-    return toRustBuffer(buf);
-  }
-
-  static int write(SearchMatrixRequest value, Uint8List buf) {
-    int new_offset = buf.offsetInBytes;
-    new_offset += FfiConverterUInt64.write(
-      value.sampleSize,
-      Uint8List.view(buf.buffer, new_offset),
-    );
-    new_offset += FfiConverterUInt64.write(
-      value.limitPerSample,
-      Uint8List.view(buf.buffer, new_offset),
-    );
-    new_offset += FfiConverterOptionalFilter.write(
-      value.filter,
-      Uint8List.view(buf.buffer, new_offset),
-    );
-    new_offset += FfiConverterOptionalString.write(
-      value.using,
-      Uint8List.view(buf.buffer, new_offset),
-    );
-    return new_offset - buf.offsetInBytes;
-  }
-
-  static int allocationSize(SearchMatrixRequest value) {
-    return FfiConverterUInt64.allocationSize(value.sampleSize) +
-        FfiConverterUInt64.allocationSize(value.limitPerSample) +
-        FfiConverterOptionalFilter.allocationSize(value.filter) +
-        FfiConverterOptionalString.allocationSize(value.using) +
-        0;
-  }
-}
-
-class SearchMatrixResponse {
-  final List<PointId> sampleIds;
-  final List<List<ScoredPoint>> nearests;
-  SearchMatrixResponse({required this.sampleIds, required this.nearests});
-}
-
-class FfiConverterSearchMatrixResponse {
-  static SearchMatrixResponse lift(RustBuffer buf) {
-    return FfiConverterSearchMatrixResponse.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<SearchMatrixResponse> read(Uint8List buf) {
-    int new_offset = buf.offsetInBytes;
-    final sampleIds_lifted = FfiConverterSequencePointId.read(
-      Uint8List.view(buf.buffer, new_offset),
-    );
-    final sampleIds = sampleIds_lifted.value;
-    new_offset += sampleIds_lifted.bytesRead;
-    final nearests_lifted = FfiConverterSequenceSequenceScoredPoint.read(
-      Uint8List.view(buf.buffer, new_offset),
-    );
-    final nearests = nearests_lifted.value;
-    new_offset += nearests_lifted.bytesRead;
-    return LiftRetVal(
-      SearchMatrixResponse(sampleIds: sampleIds, nearests: nearests),
-      new_offset - buf.offsetInBytes,
-    );
-  }
-
-  static RustBuffer lower(SearchMatrixResponse value) {
-    final total_length =
-        FfiConverterSequencePointId.allocationSize(value.sampleIds) +
-        FfiConverterSequenceSequenceScoredPoint.allocationSize(value.nearests) +
-        0;
-    final buf = Uint8List(total_length);
-    write(value, buf);
-    return toRustBuffer(buf);
-  }
-
-  static int write(SearchMatrixResponse value, Uint8List buf) {
-    int new_offset = buf.offsetInBytes;
-    new_offset += FfiConverterSequencePointId.write(
-      value.sampleIds,
-      Uint8List.view(buf.buffer, new_offset),
-    );
-    new_offset += FfiConverterSequenceSequenceScoredPoint.write(
-      value.nearests,
-      Uint8List.view(buf.buffer, new_offset),
-    );
-    return new_offset - buf.offsetInBytes;
-  }
-
-  static int allocationSize(SearchMatrixResponse value) {
-    return FfiConverterSequencePointId.allocationSize(value.sampleIds) +
-        FfiConverterSequenceSequenceScoredPoint.allocationSize(value.nearests) +
-        0;
-  }
-}
-
 class ContextPair {
   final NamedVector positive;
   final NamedVector negative;
+
   ContextPair({required this.positive, required this.negative});
 }
 
@@ -2381,6 +2314,7 @@ class FfiConverterContextPair {
 
   static LiftRetVal<ContextPair> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final positive_lifted = FfiConverterNamedVector.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -2409,6 +2343,7 @@ class FfiConverterContextPair {
 
   static int write(ContextPair value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterNamedVector.write(
       value.positive,
       Uint8List.view(buf.buffer, new_offset),
@@ -2431,6 +2366,7 @@ class FeedbackCoefficients {
   final double a;
   final double b;
   final double c;
+
   FeedbackCoefficients({required this.a, required this.b, required this.c});
 }
 
@@ -2441,6 +2377,7 @@ class FfiConverterFeedbackCoefficients {
 
   static LiftRetVal<FeedbackCoefficients> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final a_lifted = FfiConverterDouble32.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -2475,6 +2412,7 @@ class FfiConverterFeedbackCoefficients {
 
   static int write(FeedbackCoefficients value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterDouble32.write(
       value.a,
       Uint8List.view(buf.buffer, new_offset),
@@ -2501,6 +2439,7 @@ class FfiConverterFeedbackCoefficients {
 class FeedbackItem {
   final NamedVector vector;
   final double score;
+
   FeedbackItem({required this.vector, required this.score});
 }
 
@@ -2511,6 +2450,7 @@ class FfiConverterFeedbackItem {
 
   static LiftRetVal<FeedbackItem> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final vector_lifted = FfiConverterNamedVector.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -2539,6 +2479,7 @@ class FfiConverterFeedbackItem {
 
   static int write(FeedbackItem value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterNamedVector.write(
       value.vector,
       Uint8List.view(buf.buffer, new_offset),
@@ -2561,6 +2502,7 @@ class OrderBy {
   final String key;
   final Direction? direction;
   final StartFrom? startFrom;
+
   OrderBy({required this.key, this.direction = null, this.startFrom = null});
 }
 
@@ -2571,6 +2513,7 @@ class FfiConverterOrderBy {
 
   static LiftRetVal<OrderBy> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final key_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -2605,6 +2548,7 @@ class FfiConverterOrderBy {
 
   static int write(OrderBy value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterString.write(
       value.key,
       Uint8List.view(buf.buffer, new_offset),
@@ -2635,6 +2579,7 @@ class Prefetch {
   final Filter? filter;
   final double? scoreThreshold;
   final SearchParams? params;
+
   Prefetch({
     required this.limit,
     this.query = null,
@@ -2652,6 +2597,7 @@ class FfiConverterPrefetch {
 
   static LiftRetVal<Prefetch> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final limit_lifted = FfiConverterUInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -2711,6 +2657,7 @@ class FfiConverterPrefetch {
 
   static int write(Prefetch value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterUInt64.write(
       value.limit,
       Uint8List.view(buf.buffer, new_offset),
@@ -2759,6 +2706,7 @@ class QueryRequest {
   final Filter? filter;
   final double? scoreThreshold;
   final SearchParams? params;
+
   QueryRequest({
     required this.limit,
     this.offset = null,
@@ -2779,6 +2727,7 @@ class FfiConverterQueryRequest {
 
   static LiftRetVal<QueryRequest> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final limit_lifted = FfiConverterUInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -2859,6 +2808,7 @@ class FfiConverterQueryRequest {
 
   static int write(QueryRequest value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterUInt64.write(
       value.limit,
       Uint8List.view(buf.buffer, new_offset),
@@ -2916,6 +2866,7 @@ class SearchParams {
   final int? hnswEf;
   final bool exact;
   final bool indexedOnly;
+
   SearchParams({
     this.hnswEf = null,
     this.exact = false,
@@ -2930,6 +2881,7 @@ class FfiConverterSearchParams {
 
   static LiftRetVal<SearchParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final hnswEf_lifted = FfiConverterOptionalUInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -2964,6 +2916,7 @@ class FfiConverterSearchParams {
 
   static int write(SearchParams value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalUInt64.write(
       value.hnswEf,
       Uint8List.view(buf.buffer, new_offset),
@@ -2991,6 +2944,7 @@ class RetrieveRequest {
   final List<PointId> pointIds;
   final WithPayload? withPayload;
   final WithVector? withVector;
+
   RetrieveRequest({
     required this.pointIds,
     this.withPayload = null,
@@ -3005,6 +2959,7 @@ class FfiConverterRetrieveRequest {
 
   static LiftRetVal<RetrieveRequest> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final pointIds_lifted = FfiConverterSequencePointId.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -3043,6 +2998,7 @@ class FfiConverterRetrieveRequest {
 
   static int write(RetrieveRequest value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterSequencePointId.write(
       value.pointIds,
       Uint8List.view(buf.buffer, new_offset),
@@ -3073,6 +3029,7 @@ class ScrollRequest {
   final WithPayload? withPayload;
   final WithVector? withVector;
   final OrderBy? orderBy;
+
   ScrollRequest({
     this.offset = null,
     this.limit = null,
@@ -3090,6 +3047,7 @@ class FfiConverterScrollRequest {
 
   static LiftRetVal<ScrollRequest> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final offset_lifted = FfiConverterOptionalPointId.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -3149,6 +3107,7 @@ class FfiConverterScrollRequest {
 
   static int write(ScrollRequest value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalPointId.write(
       value.offset,
       Uint8List.view(buf.buffer, new_offset),
@@ -3190,6 +3149,7 @@ class FfiConverterScrollRequest {
 class ScrollResponse {
   final List<Record> records;
   final PointId? nextOffset;
+
   ScrollResponse({required this.records, this.nextOffset = null});
 }
 
@@ -3200,6 +3160,7 @@ class FfiConverterScrollResponse {
 
   static LiftRetVal<ScrollResponse> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final records_lifted = FfiConverterSequenceRecord.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -3228,6 +3189,7 @@ class FfiConverterScrollResponse {
 
   static int write(ScrollResponse value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterSequenceRecord.write(
       value.records,
       Uint8List.view(buf.buffer, new_offset),
@@ -3255,6 +3217,7 @@ class SearchRequest {
   final WithVector? withVector;
   final WithPayload? withPayload;
   final double? scoreThreshold;
+
   SearchRequest({
     required this.query,
     required this.limit,
@@ -3274,6 +3237,7 @@ class FfiConverterSearchRequest {
 
   static LiftRetVal<SearchRequest> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final query_lifted = FfiConverterQuery.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -3347,6 +3311,7 @@ class FfiConverterSearchRequest {
 
   static int write(SearchRequest value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterQuery.write(
       value.query,
       Uint8List.view(buf.buffer, new_offset),
@@ -3398,6 +3363,7 @@ class FfiConverterSearchRequest {
 class BoolIndexParams {
   final Memory? memory;
   final bool? enableHnsw;
+
   BoolIndexParams({this.memory = null, this.enableHnsw = null});
 }
 
@@ -3408,6 +3374,7 @@ class FfiConverterBoolIndexParams {
 
   static LiftRetVal<BoolIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final memory_lifted = FfiConverterOptionalMemory.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -3436,6 +3403,7 @@ class FfiConverterBoolIndexParams {
 
   static int write(BoolIndexParams value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalMemory.write(
       value.memory,
       Uint8List.view(buf.buffer, new_offset),
@@ -3458,6 +3426,7 @@ class DatetimeIndexParams {
   final bool? isPrincipal;
   final Memory? memory;
   final bool? enableHnsw;
+
   DatetimeIndexParams({
     this.isPrincipal = null,
     this.memory = null,
@@ -3472,6 +3441,7 @@ class FfiConverterDatetimeIndexParams {
 
   static LiftRetVal<DatetimeIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final isPrincipal_lifted = FfiConverterOptionalBool.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -3510,6 +3480,7 @@ class FfiConverterDatetimeIndexParams {
 
   static int write(DatetimeIndexParams value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalBool.write(
       value.isPrincipal,
       Uint8List.view(buf.buffer, new_offset),
@@ -3537,6 +3508,7 @@ class FloatIndexParams {
   final bool? isPrincipal;
   final Memory? memory;
   final bool? enableHnsw;
+
   FloatIndexParams({
     this.isPrincipal = null,
     this.memory = null,
@@ -3551,6 +3523,7 @@ class FfiConverterFloatIndexParams {
 
   static LiftRetVal<FloatIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final isPrincipal_lifted = FfiConverterOptionalBool.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -3589,6 +3562,7 @@ class FfiConverterFloatIndexParams {
 
   static int write(FloatIndexParams value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalBool.write(
       value.isPrincipal,
       Uint8List.view(buf.buffer, new_offset),
@@ -3615,6 +3589,7 @@ class FfiConverterFloatIndexParams {
 class GeoIndexParams {
   final Memory? memory;
   final bool? enableHnsw;
+
   GeoIndexParams({this.memory = null, this.enableHnsw = null});
 }
 
@@ -3625,6 +3600,7 @@ class FfiConverterGeoIndexParams {
 
   static LiftRetVal<GeoIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final memory_lifted = FfiConverterOptionalMemory.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -3653,6 +3629,7 @@ class FfiConverterGeoIndexParams {
 
   static int write(GeoIndexParams value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalMemory.write(
       value.memory,
       Uint8List.view(buf.buffer, new_offset),
@@ -3677,6 +3654,7 @@ class IntegerIndexParams {
   final bool? isPrincipal;
   final Memory? memory;
   final bool? enableHnsw;
+
   IntegerIndexParams({
     this.lookup = null,
     this.range = null,
@@ -3693,6 +3671,7 @@ class FfiConverterIntegerIndexParams {
 
   static LiftRetVal<IntegerIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final lookup_lifted = FfiConverterOptionalBool.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -3745,6 +3724,7 @@ class FfiConverterIntegerIndexParams {
 
   static int write(IntegerIndexParams value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalBool.write(
       value.lookup,
       Uint8List.view(buf.buffer, new_offset),
@@ -3783,6 +3763,7 @@ class KeywordIndexParams {
   final Memory? memory;
   final bool? enableHnsw;
   final bool? prefix;
+
   KeywordIndexParams({
     this.isTenant = null,
     this.memory = null,
@@ -3798,6 +3779,7 @@ class FfiConverterKeywordIndexParams {
 
   static LiftRetVal<KeywordIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final isTenant_lifted = FfiConverterOptionalBool.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -3843,6 +3825,7 @@ class FfiConverterKeywordIndexParams {
 
   static int write(KeywordIndexParams value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalBool.write(
       value.isTenant,
       Uint8List.view(buf.buffer, new_offset),
@@ -3875,6 +3858,7 @@ class PayloadIndexInfo {
   final PayloadSchemaType dataType;
   final PayloadIndexParams? params;
   final int points;
+
   PayloadIndexInfo({
     required this.dataType,
     this.params = null,
@@ -3889,6 +3873,7 @@ class FfiConverterPayloadIndexInfo {
 
   static LiftRetVal<PayloadIndexInfo> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final dataType_lifted = FfiConverterPayloadSchemaType.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -3923,6 +3908,7 @@ class FfiConverterPayloadIndexInfo {
 
   static int write(PayloadIndexInfo value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterPayloadSchemaType.write(
       value.dataType,
       Uint8List.view(buf.buffer, new_offset),
@@ -3957,6 +3943,7 @@ class TextIndexParams {
   final Memory? memory;
   final Stemmer? stemmer;
   final bool? enableHnsw;
+
   TextIndexParams({
     this.tokenizer = null,
     this.minTokenLen = null,
@@ -3978,6 +3965,7 @@ class FfiConverterTextIndexParams {
 
   static LiftRetVal<TextIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final tokenizer_lifted = FfiConverterOptionalTokenizerType.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -4065,6 +4053,7 @@ class FfiConverterTextIndexParams {
 
   static int write(TextIndexParams value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalTokenizerType.write(
       value.tokenizer,
       Uint8List.view(buf.buffer, new_offset),
@@ -4127,6 +4116,7 @@ class UuidIndexParams {
   final bool? isTenant;
   final Memory? memory;
   final bool? enableHnsw;
+
   UuidIndexParams({
     this.isTenant = null,
     this.memory = null,
@@ -4141,6 +4131,7 @@ class FfiConverterUuidIndexParams {
 
   static LiftRetVal<UuidIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final isTenant_lifted = FfiConverterOptionalBool.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -4179,6 +4170,7 @@ class FfiConverterUuidIndexParams {
 
   static int write(UuidIndexParams value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterOptionalBool.write(
       value.isTenant,
       Uint8List.view(buf.buffer, new_offset),
@@ -4206,6 +4198,7 @@ class Point {
   final PointId id;
   final Vector vector;
   final String? payload;
+
   Point({required this.id, required this.vector, this.payload = null});
 }
 
@@ -4216,6 +4209,7 @@ class FfiConverterPoint {
 
   static LiftRetVal<Point> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final id_lifted = FfiConverterPointId.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -4250,6 +4244,7 @@ class FfiConverterPoint {
 
   static int write(Point value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterPointId.write(
       value.id,
       Uint8List.view(buf.buffer, new_offset),
@@ -4276,6 +4271,7 @@ class FfiConverterPoint {
 class PointVectors {
   final PointId id;
   final Vector vector;
+
   PointVectors({required this.id, required this.vector});
 }
 
@@ -4286,6 +4282,7 @@ class FfiConverterPointVectors {
 
   static LiftRetVal<PointVectors> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final id_lifted = FfiConverterPointId.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -4314,6 +4311,7 @@ class FfiConverterPointVectors {
 
   static int write(PointVectors value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterPointId.write(
       value.id,
       Uint8List.view(buf.buffer, new_offset),
@@ -4337,6 +4335,7 @@ class Record {
   final String? payload;
   final String? vector;
   final OrderValue? orderValue;
+
   Record({
     required this.id,
     this.payload = null,
@@ -4352,6 +4351,7 @@ class FfiConverterRecord {
 
   static LiftRetVal<Record> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final id_lifted = FfiConverterPointId.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -4392,6 +4392,7 @@ class FfiConverterRecord {
 
   static int write(Record value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterPointId.write(
       value.id,
       Uint8List.view(buf.buffer, new_offset),
@@ -4427,6 +4428,7 @@ class ScoredPoint {
   final String? payload;
   final String? vector;
   final OrderValue? orderValue;
+
   ScoredPoint({
     required this.id,
     required this.version,
@@ -4444,6 +4446,7 @@ class FfiConverterScoredPoint {
 
   static LiftRetVal<ScoredPoint> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final id_lifted = FfiConverterPointId.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -4503,6 +4506,7 @@ class FfiConverterScoredPoint {
 
   static int write(ScoredPoint value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterPointId.write(
       value.id,
       Uint8List.view(buf.buffer, new_offset),
@@ -4544,6 +4548,7 @@ class FfiConverterScoredPoint {
 class SparseVector {
   final List<int> indices;
   final List<double> values;
+
   SparseVector({required this.indices, required this.values});
 }
 
@@ -4554,6 +4559,7 @@ class FfiConverterSparseVector {
 
   static LiftRetVal<SparseVector> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final indices_lifted = FfiConverterSequenceUInt32.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -4582,6 +4588,7 @@ class FfiConverterSparseVector {
 
   static int write(SparseVector value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     new_offset += FfiConverterSequenceUInt32.write(
       value.indices,
       Uint8List.view(buf.buffer, new_offset),
@@ -4939,10 +4946,14 @@ class FfiConverterQuantizationConfig {
 
 class ScalarQuantizationConfig extends QuantizationConfig {
   final ScalarQuantizationParams config;
+
   ScalarQuantizationConfig(ScalarQuantizationParams this.config);
+
   ScalarQuantizationConfig._(ScalarQuantizationParams this.config);
+
   static LiftRetVal<ScalarQuantizationConfig> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final config_lifted = FfiConverterScalarQuantizationParams.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -4967,20 +4978,26 @@ class ScalarQuantizationConfig extends QuantizationConfig {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterScalarQuantizationParams.write(
       config,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class ProductQuantizationConfig extends QuantizationConfig {
   final ProductQuantizationParams config;
+
   ProductQuantizationConfig(ProductQuantizationParams this.config);
+
   ProductQuantizationConfig._(ProductQuantizationParams this.config);
+
   static LiftRetVal<ProductQuantizationConfig> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final config_lifted = FfiConverterProductQuantizationParams.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5005,20 +5022,26 @@ class ProductQuantizationConfig extends QuantizationConfig {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterProductQuantizationParams.write(
       config,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class BinaryQuantizationConfig extends QuantizationConfig {
   final BinaryQuantizationParams config;
+
   BinaryQuantizationConfig(BinaryQuantizationParams this.config);
+
   BinaryQuantizationConfig._(BinaryQuantizationParams this.config);
+
   static LiftRetVal<BinaryQuantizationConfig> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final config_lifted = FfiConverterBinaryQuantizationParams.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5043,20 +5066,26 @@ class BinaryQuantizationConfig extends QuantizationConfig {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 3);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterBinaryQuantizationParams.write(
       config,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class TurboQuantizationConfig extends QuantizationConfig {
   final TurboQuantizationParams config;
+
   TurboQuantizationConfig(TurboQuantizationParams this.config);
+
   TurboQuantizationConfig._(TurboQuantizationParams this.config);
+
   static LiftRetVal<TurboQuantizationConfig> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final config_lifted = FfiConverterTurboQuantizationParams.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5081,10 +5110,12 @@ class TurboQuantizationConfig extends QuantizationConfig {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 4);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterTurboQuantizationParams.write(
       config,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -5297,9 +5328,12 @@ class FfiConverterEdgeException {
 
 class ShardClosedEdgeException extends EdgeException {
   ShardClosedEdgeException();
+
   ShardClosedEdgeException._();
+
   static LiftRetVal<ShardClosedEdgeException> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     return LiftRetVal(ShardClosedEdgeException._(), new_offset);
   }
 
@@ -5319,6 +5353,7 @@ class ShardClosedEdgeException extends EdgeException {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     return new_offset;
   }
 
@@ -5330,10 +5365,14 @@ class ShardClosedEdgeException extends EdgeException {
 
 class InvalidArgumentEdgeException extends EdgeException {
   final String reason;
+
   InvalidArgumentEdgeException(String this.reason);
+
   InvalidArgumentEdgeException._(String this.reason);
+
   static LiftRetVal<InvalidArgumentEdgeException> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final reason_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5358,10 +5397,12 @@ class InvalidArgumentEdgeException extends EdgeException {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       reason,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 
@@ -5373,10 +5414,14 @@ class InvalidArgumentEdgeException extends EdgeException {
 
 class OperationExceptionEdgeException extends EdgeException {
   final String reason;
+
   OperationExceptionEdgeException(String this.reason);
+
   OperationExceptionEdgeException._(String this.reason);
+
   static LiftRetVal<OperationExceptionEdgeException> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final reason_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5401,10 +5446,12 @@ class OperationExceptionEdgeException extends EdgeException {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 3);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       reason,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 
@@ -5474,10 +5521,14 @@ class FfiConverterAnyVariants {
 
 class StringsAnyVariants extends AnyVariants {
   final List<String> values;
+
   StringsAnyVariants(List<String> this.values);
+
   StringsAnyVariants._(List<String> this.values);
+
   static LiftRetVal<StringsAnyVariants> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final values_lifted = FfiConverterSequenceString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5502,20 +5553,26 @@ class StringsAnyVariants extends AnyVariants {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterSequenceString.write(
       values,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class IntegersAnyVariants extends AnyVariants {
   final List<int> values;
+
   IntegersAnyVariants(List<int> this.values);
+
   IntegersAnyVariants._(List<int> this.values);
+
   static LiftRetVal<IntegersAnyVariants> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final values_lifted = FfiConverterSequenceInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5540,10 +5597,12 @@ class IntegersAnyVariants extends AnyVariants {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterSequenceInt64.write(
       values,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -5634,10 +5693,14 @@ class FfiConverterCondition {
 
 class FieldConditionVariant extends Condition {
   final FieldCondition condition;
+
   FieldConditionVariant(FieldCondition this.condition);
+
   FieldConditionVariant._(FieldCondition this.condition);
+
   static LiftRetVal<FieldConditionVariant> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final condition_lifted = FfiConverterFieldCondition.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5662,20 +5725,26 @@ class FieldConditionVariant extends Condition {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterFieldCondition.write(
       condition,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class IsEmptyCondition extends Condition {
   final String key;
+
   IsEmptyCondition(String this.key);
+
   IsEmptyCondition._(String this.key);
+
   static LiftRetVal<IsEmptyCondition> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final key_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5700,20 +5769,26 @@ class IsEmptyCondition extends Condition {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       key,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class IsNullCondition extends Condition {
   final String key;
+
   IsNullCondition(String this.key);
+
   IsNullCondition._(String this.key);
+
   static LiftRetVal<IsNullCondition> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final key_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5738,20 +5813,26 @@ class IsNullCondition extends Condition {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 3);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       key,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class HasIdCondition extends Condition {
   final List<PointId> ids;
+
   HasIdCondition(List<PointId> this.ids);
+
   HasIdCondition._(List<PointId> this.ids);
+
   static LiftRetVal<HasIdCondition> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final ids_lifted = FfiConverterSequencePointId.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5776,20 +5857,26 @@ class HasIdCondition extends Condition {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 4);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterSequencePointId.write(
       ids,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class HasVectorCondition extends Condition {
   final String vectorName;
+
   HasVectorCondition(String this.vectorName);
+
   HasVectorCondition._(String this.vectorName);
+
   static LiftRetVal<HasVectorCondition> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final vectorName_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5814,10 +5901,12 @@ class HasVectorCondition extends Condition {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 5);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       vectorName,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -5825,10 +5914,14 @@ class HasVectorCondition extends Condition {
 class SliceCondition extends Condition {
   final int total;
   final int index;
+
   SliceCondition({required int this.total, required int this.index});
+
   SliceCondition._(int this.total, int this.index);
+
   static LiftRetVal<SliceCondition> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final total_lifted = FfiConverterUInt32.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5860,6 +5953,7 @@ class SliceCondition extends Condition {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 6);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterUInt32.write(
       total,
       Uint8List.view(buf.buffer, new_offset),
@@ -5868,6 +5962,7 @@ class SliceCondition extends Condition {
       index,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -5875,10 +5970,14 @@ class SliceCondition extends Condition {
 class NestedCondition extends Condition {
   final String key;
   final Filter filter;
+
   NestedCondition({required String this.key, required Filter this.filter});
+
   NestedCondition._(String this.key, Filter this.filter);
+
   static LiftRetVal<NestedCondition> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final key_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5910,6 +6009,7 @@ class NestedCondition extends Condition {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 7);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       key,
       Uint8List.view(buf.buffer, new_offset),
@@ -5918,16 +6018,21 @@ class NestedCondition extends Condition {
       filter,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class FilterCondition extends Condition {
   final Filter filter;
+
   FilterCondition(Filter this.filter);
+
   FilterCondition._(Filter this.filter);
+
   static LiftRetVal<FilterCondition> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final filter_lifted = FfiConverterFilter.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -5952,10 +6057,12 @@ class FilterCondition extends Condition {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 8);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterFilter.write(
       filter,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -6040,10 +6147,14 @@ class FfiConverterMatch {
 
 class ValueMatch extends Match {
   final ValueVariants value;
+
   ValueMatch(ValueVariants this.value);
+
   ValueMatch._(ValueVariants this.value);
+
   static LiftRetVal<ValueMatch> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterValueVariants.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6068,20 +6179,26 @@ class ValueMatch extends Match {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterValueVariants.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class TextMatch extends Match {
   final String text;
+
   TextMatch(String this.text);
+
   TextMatch._(String this.text);
+
   static LiftRetVal<TextMatch> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final text_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6106,20 +6223,26 @@ class TextMatch extends Match {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       text,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class TextAnyMatch extends Match {
   final String textAny;
+
   TextAnyMatch(String this.textAny);
+
   TextAnyMatch._(String this.textAny);
+
   static LiftRetVal<TextAnyMatch> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final textAny_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6144,20 +6267,26 @@ class TextAnyMatch extends Match {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 3);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       textAny,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class PhraseMatch extends Match {
   final String phrase;
+
   PhraseMatch(String this.phrase);
+
   PhraseMatch._(String this.phrase);
+
   static LiftRetVal<PhraseMatch> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final phrase_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6182,20 +6311,26 @@ class PhraseMatch extends Match {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 4);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       phrase,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class PrefixMatch extends Match {
   final String prefix;
+
   PrefixMatch(String this.prefix);
+
   PrefixMatch._(String this.prefix);
+
   static LiftRetVal<PrefixMatch> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final prefix_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6220,20 +6355,26 @@ class PrefixMatch extends Match {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 5);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       prefix,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class AnyMatch extends Match {
   final AnyVariants any;
+
   AnyMatch(AnyVariants this.any);
+
   AnyMatch._(AnyVariants this.any);
+
   static LiftRetVal<AnyMatch> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final any_lifted = FfiConverterAnyVariants.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6258,20 +6399,26 @@ class AnyMatch extends Match {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 6);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterAnyVariants.write(
       any,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class ExceptMatch extends Match {
   final AnyVariants except;
+
   ExceptMatch(AnyVariants this.except);
+
   ExceptMatch._(AnyVariants this.except);
+
   static LiftRetVal<ExceptMatch> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final except_lifted = FfiConverterAnyVariants.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6296,10 +6443,12 @@ class ExceptMatch extends Match {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 7);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterAnyVariants.write(
       except,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -6360,10 +6509,14 @@ class FfiConverterValueVariants {
 
 class StringValueVariants extends ValueVariants {
   final String value;
+
   StringValueVariants(String this.value);
+
   StringValueVariants._(String this.value);
+
   static LiftRetVal<StringValueVariants> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6388,20 +6541,26 @@ class StringValueVariants extends ValueVariants {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class IntegerValueVariants extends ValueVariants {
   final int value;
+
   IntegerValueVariants(int this.value);
+
   IntegerValueVariants._(int this.value);
+
   static LiftRetVal<IntegerValueVariants> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6426,20 +6585,26 @@ class IntegerValueVariants extends ValueVariants {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterInt64.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class BoolValueVariants extends ValueVariants {
   final bool value;
+
   BoolValueVariants(bool this.value);
+
   BoolValueVariants._(bool this.value);
+
   static LiftRetVal<BoolValueVariants> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterBool.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6464,10 +6629,12 @@ class BoolValueVariants extends ValueVariants {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 3);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterBool.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -6566,10 +6733,14 @@ class FfiConverterGroupId {
 
 class StringGroupId extends GroupId {
   final String value;
+
   StringGroupId(String this.value);
+
   StringGroupId._(String this.value);
+
   static LiftRetVal<StringGroupId> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6594,20 +6765,26 @@ class StringGroupId extends GroupId {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class NumberU64GroupId extends GroupId {
   final int value;
+
   NumberU64GroupId(int this.value);
+
   NumberU64GroupId._(int this.value);
+
   static LiftRetVal<NumberU64GroupId> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterUInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6632,20 +6809,26 @@ class NumberU64GroupId extends GroupId {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterUInt64.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class NumberI64GroupId extends GroupId {
   final int value;
+
   NumberI64GroupId(int this.value);
+
   NumberI64GroupId._(int this.value);
+
   static LiftRetVal<NumberI64GroupId> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6670,10 +6853,12 @@ class NumberI64GroupId extends GroupId {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 3);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterInt64.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -6765,10 +6950,14 @@ class FfiConverterFusion {
 class RrfFusion extends Fusion {
   final int k;
   final List<double>? weights;
+
   RrfFusion({required int this.k, required List<double>? this.weights});
+
   RrfFusion._(int this.k, List<double>? this.weights);
+
   static LiftRetVal<RrfFusion> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final k_lifted = FfiConverterUInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6800,6 +6989,7 @@ class RrfFusion extends Fusion {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterUInt64.write(
       k,
       Uint8List.view(buf.buffer, new_offset),
@@ -6808,15 +6998,19 @@ class RrfFusion extends Fusion {
       weights,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class DbsfFusion extends Fusion {
   DbsfFusion();
+
   DbsfFusion._();
+
   static LiftRetVal<DbsfFusion> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     return LiftRetVal(DbsfFusion._(), new_offset);
   }
 
@@ -6836,6 +7030,7 @@ class DbsfFusion extends Fusion {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     return new_offset;
   }
 }
@@ -6909,10 +7104,14 @@ class FfiConverterQuery {
 class NearestQuery extends Query {
   final NamedVector vector;
   final String? using;
+
   NearestQuery({required NamedVector this.vector, required String? this.using});
+
   NearestQuery._(NamedVector this.vector, String? this.using);
+
   static LiftRetVal<NearestQuery> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final vector_lifted = FfiConverterNamedVector.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -6944,6 +7143,7 @@ class NearestQuery extends Query {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterNamedVector.write(
       vector,
       Uint8List.view(buf.buffer, new_offset),
@@ -6952,6 +7152,7 @@ class NearestQuery extends Query {
       using,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -6961,20 +7162,24 @@ class RecommendQuery extends Query {
   final List<NamedVector> negatives;
   final RecommendStrategy? strategy;
   final String? using;
+
   RecommendQuery({
     required List<NamedVector> this.positives,
     required List<NamedVector> this.negatives,
     required RecommendStrategy? this.strategy,
     required String? this.using,
   });
+
   RecommendQuery._(
     List<NamedVector> this.positives,
     List<NamedVector> this.negatives,
     RecommendStrategy? this.strategy,
     String? this.using,
   );
+
   static LiftRetVal<RecommendQuery> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final positives_lifted = FfiConverterSequenceNamedVector.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -7021,6 +7226,7 @@ class RecommendQuery extends Query {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterSequenceNamedVector.write(
       positives,
       Uint8List.view(buf.buffer, new_offset),
@@ -7037,6 +7243,7 @@ class RecommendQuery extends Query {
       using,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -7045,18 +7252,22 @@ class DiscoverQuery extends Query {
   final NamedVector target;
   final List<ContextPair> context;
   final String? using;
+
   DiscoverQuery({
     required NamedVector this.target,
     required List<ContextPair> this.context,
     required String? this.using,
   });
+
   DiscoverQuery._(
     NamedVector this.target,
     List<ContextPair> this.context,
     String? this.using,
   );
+
   static LiftRetVal<DiscoverQuery> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final target_lifted = FfiConverterNamedVector.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -7094,6 +7305,7 @@ class DiscoverQuery extends Query {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 3);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterNamedVector.write(
       target,
       Uint8List.view(buf.buffer, new_offset),
@@ -7106,6 +7318,7 @@ class DiscoverQuery extends Query {
       using,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -7113,13 +7326,17 @@ class DiscoverQuery extends Query {
 class ContextQuery extends Query {
   final List<ContextPair> context;
   final String? using;
+
   ContextQuery({
     required List<ContextPair> this.context,
     required String? this.using,
   });
+
   ContextQuery._(List<ContextPair> this.context, String? this.using);
+
   static LiftRetVal<ContextQuery> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final context_lifted = FfiConverterSequenceContextPair.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -7151,6 +7368,7 @@ class ContextQuery extends Query {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 4);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterSequenceContextPair.write(
       context,
       Uint8List.view(buf.buffer, new_offset),
@@ -7159,6 +7377,7 @@ class ContextQuery extends Query {
       using,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -7168,20 +7387,24 @@ class FeedbackQuery extends Query {
   final List<FeedbackItem> feedback;
   final FeedbackCoefficients coefficients;
   final String? using;
+
   FeedbackQuery({
     required NamedVector this.target,
     required List<FeedbackItem> this.feedback,
     required FeedbackCoefficients this.coefficients,
     required String? this.using,
   });
+
   FeedbackQuery._(
     NamedVector this.target,
     List<FeedbackItem> this.feedback,
     FeedbackCoefficients this.coefficients,
     String? this.using,
   );
+
   static LiftRetVal<FeedbackQuery> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final target_lifted = FfiConverterNamedVector.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -7228,6 +7451,7 @@ class FeedbackQuery extends Query {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 5);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterNamedVector.write(
       target,
       Uint8List.view(buf.buffer, new_offset),
@@ -7244,6 +7468,7 @@ class FeedbackQuery extends Query {
       using,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -7392,10 +7617,14 @@ class FfiConverterScoringQuery {
 
 class VectorScoringQuery extends ScoringQuery {
   final Query query;
+
   VectorScoringQuery(Query this.query);
+
   VectorScoringQuery._(Query this.query);
+
   static LiftRetVal<VectorScoringQuery> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final query_lifted = FfiConverterQuery.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -7420,20 +7649,26 @@ class VectorScoringQuery extends ScoringQuery {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterQuery.write(
       query,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class FusionScoringQuery extends ScoringQuery {
   final Fusion fusion;
+
   FusionScoringQuery(Fusion this.fusion);
+
   FusionScoringQuery._(Fusion this.fusion);
+
   static LiftRetVal<FusionScoringQuery> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final fusion_lifted = FfiConverterFusion.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -7458,20 +7693,26 @@ class FusionScoringQuery extends ScoringQuery {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterFusion.write(
       fusion,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class OrderByScoringQuery extends ScoringQuery {
   final OrderBy orderBy;
+
   OrderByScoringQuery(OrderBy this.orderBy);
+
   OrderByScoringQuery._(OrderBy this.orderBy);
+
   static LiftRetVal<OrderByScoringQuery> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final orderBy_lifted = FfiConverterOrderBy.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -7496,10 +7737,12 @@ class OrderByScoringQuery extends ScoringQuery {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 3);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterOrderBy.write(
       orderBy,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -7507,16 +7750,20 @@ class OrderByScoringQuery extends ScoringQuery {
 class FormulaScoringQuery extends ScoringQuery {
   final Expression expression;
   final Map<String, String> defaults;
+
   FormulaScoringQuery({
     required Expression this.expression,
     required Map<String, String> this.defaults,
   });
+
   FormulaScoringQuery._(
     Expression this.expression,
     Map<String, String> this.defaults,
   );
+
   static LiftRetVal<FormulaScoringQuery> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final expression_lifted = Expression.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -7548,6 +7795,7 @@ class FormulaScoringQuery extends ScoringQuery {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 4);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += Expression.write(
       expression,
       Uint8List.view(buf.buffer, new_offset),
@@ -7556,6 +7804,7 @@ class FormulaScoringQuery extends ScoringQuery {
       defaults,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -7565,20 +7814,24 @@ class MmrScoringQuery extends ScoringQuery {
   final String? using;
   final double lambda;
   final int candidatesLimit;
+
   MmrScoringQuery({
     required NamedVector this.vector,
     required String? this.using,
     required double this.lambda,
     required int this.candidatesLimit,
   });
+
   MmrScoringQuery._(
     NamedVector this.vector,
     String? this.using,
     double this.lambda,
     int this.candidatesLimit,
   );
+
   static LiftRetVal<MmrScoringQuery> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final vector_lifted = FfiConverterNamedVector.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -7625,6 +7878,7 @@ class MmrScoringQuery extends ScoringQuery {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 5);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterNamedVector.write(
       vector,
       Uint8List.view(buf.buffer, new_offset),
@@ -7641,16 +7895,21 @@ class MmrScoringQuery extends ScoringQuery {
       candidatesLimit,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class SampleScoringQuery extends ScoringQuery {
   final Sample sample;
+
   SampleScoringQuery(Sample this.sample);
+
   SampleScoringQuery._(Sample this.sample);
+
   static LiftRetVal<SampleScoringQuery> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final sample_int = buf.buffer.asByteData(new_offset).getInt32(0);
     final sample = FfiConverterSample.lift(
       toRustBuffer(createUint8ListFromInt(sample_int)),
@@ -7675,12 +7934,14 @@ class SampleScoringQuery extends ScoringQuery {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 6);
     int new_offset = buf.offsetInBytes + 4;
+
     final sample_buffer = FfiConverterSample.lower(sample);
     final sample_int = sample_buffer.asUint8List().buffer.asByteData().getInt32(
       0,
     );
     buf.buffer.asByteData(new_offset).setInt32(0, sample_int);
     new_offset += 4;
+
     return new_offset;
   }
 }
@@ -7741,10 +8002,14 @@ class FfiConverterStartFrom {
 
 class IntegerStartFrom extends StartFrom {
   final int value;
+
   IntegerStartFrom(int this.value);
+
   IntegerStartFrom._(int this.value);
+
   static LiftRetVal<IntegerStartFrom> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -7769,20 +8034,26 @@ class IntegerStartFrom extends StartFrom {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterInt64.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class FloatStartFrom extends StartFrom {
   final double value;
+
   FloatStartFrom(double this.value);
+
   FloatStartFrom._(double this.value);
+
   static LiftRetVal<FloatStartFrom> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterDouble64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -7807,20 +8078,26 @@ class FloatStartFrom extends StartFrom {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterDouble64.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class DatetimeStartFrom extends StartFrom {
   final String value;
+
   DatetimeStartFrom(String this.value);
+
   DatetimeStartFrom._(String this.value);
+
   static LiftRetVal<DatetimeStartFrom> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -7845,10 +8122,12 @@ class DatetimeStartFrom extends StartFrom {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 3);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -8062,10 +8341,14 @@ class FfiConverterPayloadIndexParams {
 
 class KeywordPayloadIndexParams extends PayloadIndexParams {
   final KeywordIndexParams config;
+
   KeywordPayloadIndexParams(KeywordIndexParams this.config);
+
   KeywordPayloadIndexParams._(KeywordIndexParams this.config);
+
   static LiftRetVal<KeywordPayloadIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final config_lifted = FfiConverterKeywordIndexParams.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -8090,20 +8373,26 @@ class KeywordPayloadIndexParams extends PayloadIndexParams {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterKeywordIndexParams.write(
       config,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class IntegerPayloadIndexParams extends PayloadIndexParams {
   final IntegerIndexParams config;
+
   IntegerPayloadIndexParams(IntegerIndexParams this.config);
+
   IntegerPayloadIndexParams._(IntegerIndexParams this.config);
+
   static LiftRetVal<IntegerPayloadIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final config_lifted = FfiConverterIntegerIndexParams.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -8128,20 +8417,26 @@ class IntegerPayloadIndexParams extends PayloadIndexParams {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterIntegerIndexParams.write(
       config,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class FloatPayloadIndexParams extends PayloadIndexParams {
   final FloatIndexParams config;
+
   FloatPayloadIndexParams(FloatIndexParams this.config);
+
   FloatPayloadIndexParams._(FloatIndexParams this.config);
+
   static LiftRetVal<FloatPayloadIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final config_lifted = FfiConverterFloatIndexParams.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -8166,20 +8461,26 @@ class FloatPayloadIndexParams extends PayloadIndexParams {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 3);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterFloatIndexParams.write(
       config,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class GeoPayloadIndexParams extends PayloadIndexParams {
   final GeoIndexParams config;
+
   GeoPayloadIndexParams(GeoIndexParams this.config);
+
   GeoPayloadIndexParams._(GeoIndexParams this.config);
+
   static LiftRetVal<GeoPayloadIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final config_lifted = FfiConverterGeoIndexParams.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -8204,20 +8505,26 @@ class GeoPayloadIndexParams extends PayloadIndexParams {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 4);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterGeoIndexParams.write(
       config,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class TextPayloadIndexParams extends PayloadIndexParams {
   final TextIndexParams config;
+
   TextPayloadIndexParams(TextIndexParams this.config);
+
   TextPayloadIndexParams._(TextIndexParams this.config);
+
   static LiftRetVal<TextPayloadIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final config_lifted = FfiConverterTextIndexParams.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -8242,20 +8549,26 @@ class TextPayloadIndexParams extends PayloadIndexParams {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 5);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterTextIndexParams.write(
       config,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class BoolPayloadIndexParams extends PayloadIndexParams {
   final BoolIndexParams config;
+
   BoolPayloadIndexParams(BoolIndexParams this.config);
+
   BoolPayloadIndexParams._(BoolIndexParams this.config);
+
   static LiftRetVal<BoolPayloadIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final config_lifted = FfiConverterBoolIndexParams.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -8280,20 +8593,26 @@ class BoolPayloadIndexParams extends PayloadIndexParams {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 6);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterBoolIndexParams.write(
       config,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class DatetimePayloadIndexParams extends PayloadIndexParams {
   final DatetimeIndexParams config;
+
   DatetimePayloadIndexParams(DatetimeIndexParams this.config);
+
   DatetimePayloadIndexParams._(DatetimeIndexParams this.config);
+
   static LiftRetVal<DatetimePayloadIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final config_lifted = FfiConverterDatetimeIndexParams.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -8318,20 +8637,26 @@ class DatetimePayloadIndexParams extends PayloadIndexParams {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 7);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterDatetimeIndexParams.write(
       config,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class UuidPayloadIndexParams extends PayloadIndexParams {
   final UuidIndexParams config;
+
   UuidPayloadIndexParams(UuidIndexParams this.config);
+
   UuidPayloadIndexParams._(UuidIndexParams this.config);
+
   static LiftRetVal<UuidPayloadIndexParams> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final config_lifted = FfiConverterUuidIndexParams.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -8356,10 +8681,12 @@ class UuidPayloadIndexParams extends PayloadIndexParams {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 8);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterUuidIndexParams.write(
       config,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -8504,10 +8831,14 @@ class FfiConverterStemmer {
 
 class SnowballStemmer extends Stemmer {
   final SnowballLanguage language;
+
   SnowballStemmer(SnowballLanguage this.language);
+
   SnowballStemmer._(SnowballLanguage this.language);
+
   static LiftRetVal<SnowballStemmer> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final language_int = buf.buffer.asByteData(new_offset).getInt32(0);
     final language = FfiConverterSnowballLanguage.lift(
       toRustBuffer(createUint8ListFromInt(language_int)),
@@ -8532,6 +8863,7 @@ class SnowballStemmer extends Stemmer {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     final language_buffer = FfiConverterSnowballLanguage.lower(language);
     final language_int = language_buffer
         .asUint8List()
@@ -8540,15 +8872,19 @@ class SnowballStemmer extends Stemmer {
         .getInt32(0);
     buf.buffer.asByteData(new_offset).setInt32(0, language_int);
     new_offset += 4;
+
     return new_offset;
   }
 }
 
 class DisabledStemmer extends Stemmer {
   DisabledStemmer();
+
   DisabledStemmer._();
+
   static LiftRetVal<DisabledStemmer> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     return LiftRetVal(DisabledStemmer._(), new_offset);
   }
 
@@ -8568,6 +8904,7 @@ class DisabledStemmer extends Stemmer {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     return new_offset;
   }
 }
@@ -8622,10 +8959,14 @@ class FfiConverterStopwords {
 
 class LanguageStopwords extends Stopwords {
   final Language language;
+
   LanguageStopwords(Language this.language);
+
   LanguageStopwords._(Language this.language);
+
   static LiftRetVal<LanguageStopwords> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final language_int = buf.buffer.asByteData(new_offset).getInt32(0);
     final language = FfiConverterLanguage.lift(
       toRustBuffer(createUint8ListFromInt(language_int)),
@@ -8650,6 +8991,7 @@ class LanguageStopwords extends Stopwords {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     final language_buffer = FfiConverterLanguage.lower(language);
     final language_int = language_buffer
         .asUint8List()
@@ -8658,6 +9000,7 @@ class LanguageStopwords extends Stopwords {
         .getInt32(0);
     buf.buffer.asByteData(new_offset).setInt32(0, language_int);
     new_offset += 4;
+
     return new_offset;
   }
 }
@@ -8665,13 +9008,17 @@ class LanguageStopwords extends Stopwords {
 class SetStopwords extends Stopwords {
   final List<Language>? languages;
   final List<String>? custom;
+
   SetStopwords({
     required List<Language>? this.languages,
     required List<String>? this.custom,
   });
+
   SetStopwords._(List<Language>? this.languages, List<String>? this.custom);
+
   static LiftRetVal<SetStopwords> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final languages_lifted = FfiConverterOptionalSequenceLanguage.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -8703,6 +9050,7 @@ class SetStopwords extends Stopwords {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterOptionalSequenceLanguage.write(
       languages,
       Uint8List.view(buf.buffer, new_offset),
@@ -8711,6 +9059,7 @@ class SetStopwords extends Stopwords {
       custom,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -8811,10 +9160,14 @@ class FfiConverterNamedVector {
 
 class DenseNamedVector extends NamedVector {
   final List<double> values;
+
   DenseNamedVector(List<double> this.values);
+
   DenseNamedVector._(List<double> this.values);
+
   static LiftRetVal<DenseNamedVector> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final values_lifted = FfiConverterSequenceDouble32.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -8839,20 +9192,26 @@ class DenseNamedVector extends NamedVector {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterSequenceDouble32.write(
       values,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class SparseNamedVector extends NamedVector {
   final SparseVector vector;
+
   SparseNamedVector(SparseVector this.vector);
+
   SparseNamedVector._(SparseVector this.vector);
+
   static LiftRetVal<SparseNamedVector> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final vector_lifted = FfiConverterSparseVector.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -8877,20 +9236,26 @@ class SparseNamedVector extends NamedVector {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterSparseVector.write(
       vector,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class MultiDenseNamedVector extends NamedVector {
   final List<List<double>> vectors;
+
   MultiDenseNamedVector(List<List<double>> this.vectors);
+
   MultiDenseNamedVector._(List<List<double>> this.vectors);
+
   static LiftRetVal<MultiDenseNamedVector> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final vectors_lifted = FfiConverterSequenceSequenceDouble32.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -8915,10 +9280,12 @@ class MultiDenseNamedVector extends NamedVector {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 3);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterSequenceSequenceDouble32.write(
       vectors,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -8973,10 +9340,14 @@ class FfiConverterOrderValue {
 
 class IntOrderValue extends OrderValue {
   final int value;
+
   IntOrderValue(int this.value);
+
   IntOrderValue._(int this.value);
+
   static LiftRetVal<IntOrderValue> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -9001,20 +9372,26 @@ class IntOrderValue extends OrderValue {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterInt64.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class FloatOrderValue extends OrderValue {
   final double value;
+
   FloatOrderValue(double this.value);
+
   FloatOrderValue._(double this.value);
+
   static LiftRetVal<FloatOrderValue> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterDouble64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -9039,10 +9416,12 @@ class FloatOrderValue extends OrderValue {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterDouble64.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -9097,10 +9476,14 @@ class FfiConverterPointId {
 
 class NumIdPointId extends PointId {
   final int value;
+
   NumIdPointId(int this.value);
+
   NumIdPointId._(int this.value);
+
   static LiftRetVal<NumIdPointId> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterUInt64.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -9125,20 +9508,26 @@ class NumIdPointId extends PointId {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterUInt64.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class UuidPointId extends PointId {
   final String value;
+
   UuidPointId(String this.value);
+
   UuidPointId._(String this.value);
+
   static LiftRetVal<UuidPointId> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final value_lifted = FfiConverterString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -9163,10 +9552,12 @@ class UuidPointId extends PointId {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterString.write(
       value,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -9227,10 +9618,14 @@ class FfiConverterVector {
 
 class SingleVector extends Vector {
   final List<double> values;
+
   SingleVector(List<double> this.values);
+
   SingleVector._(List<double> this.values);
+
   static LiftRetVal<SingleVector> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final values_lifted = FfiConverterSequenceDouble32.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -9255,20 +9650,26 @@ class SingleVector extends Vector {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterSequenceDouble32.write(
       values,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class MultiDenseVector extends Vector {
   final List<List<double>> vectors;
+
   MultiDenseVector(List<List<double>> this.vectors);
+
   MultiDenseVector._(List<List<double>> this.vectors);
+
   static LiftRetVal<MultiDenseVector> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final vectors_lifted = FfiConverterSequenceSequenceDouble32.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -9293,20 +9694,26 @@ class MultiDenseVector extends Vector {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterSequenceSequenceDouble32.write(
       vectors,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class NamedVectorVariant extends Vector {
   final Map<String, NamedVector> map;
+
   NamedVectorVariant(Map<String, NamedVector> this.map);
+
   NamedVectorVariant._(Map<String, NamedVector> this.map);
+
   static LiftRetVal<NamedVectorVariant> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final map_lifted = FfiConverterMapStringToNamedVector.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -9331,10 +9738,12 @@ class NamedVectorVariant extends Vector {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 3);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterMapStringToNamedVector.write(
       map,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -9395,10 +9804,14 @@ class FfiConverterWithPayload {
 
 class BoolWithPayload extends WithPayload {
   final bool enable;
+
   BoolWithPayload(bool this.enable);
+
   BoolWithPayload._(bool this.enable);
+
   static LiftRetVal<BoolWithPayload> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final enable_lifted = FfiConverterBool.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -9423,20 +9836,26 @@ class BoolWithPayload extends WithPayload {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterBool.write(
       enable,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class FieldsWithPayload extends WithPayload {
   final List<String> fields;
+
   FieldsWithPayload(List<String> this.fields);
+
   FieldsWithPayload._(List<String> this.fields);
+
   static LiftRetVal<FieldsWithPayload> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final fields_lifted = FfiConverterSequenceString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -9461,20 +9880,26 @@ class FieldsWithPayload extends WithPayload {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterSequenceString.write(
       fields,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class ExcludeWithPayload extends WithPayload {
   final List<String> fields;
+
   ExcludeWithPayload(List<String> this.fields);
+
   ExcludeWithPayload._(List<String> this.fields);
+
   static LiftRetVal<ExcludeWithPayload> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final fields_lifted = FfiConverterSequenceString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -9499,10 +9924,12 @@ class ExcludeWithPayload extends WithPayload {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 3);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterSequenceString.write(
       fields,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -9557,10 +9984,14 @@ class FfiConverterWithVector {
 
 class BoolWithVector extends WithVector {
   final bool enable;
+
   BoolWithVector(bool this.enable);
+
   BoolWithVector._(bool this.enable);
+
   static LiftRetVal<BoolWithVector> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final enable_lifted = FfiConverterBool.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -9585,20 +10016,26 @@ class BoolWithVector extends WithVector {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 1);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterBool.write(
       enable,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
 
 class NamesWithVector extends WithVector {
   final List<String> names;
+
   NamesWithVector(List<String> this.names);
+
   NamesWithVector._(List<String> this.names);
+
   static LiftRetVal<NamesWithVector> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+
     final names_lifted = FfiConverterSequenceString.read(
       Uint8List.view(buf.buffer, new_offset),
     );
@@ -9623,10 +10060,12 @@ class NamesWithVector extends WithVector {
   int write(Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, 2);
     int new_offset = buf.offsetInBytes + 4;
+
     new_offset += FfiConverterSequenceString.write(
       names,
       Uint8List.view(buf.buffer, new_offset),
     );
+
     return new_offset;
   }
 }
@@ -9734,9 +10173,11 @@ final _ExpressionFinalizer = Finalizer<Pointer<Void>>((ptr) {
 
 class Expression implements ExpressionInterface {
   late final Pointer<Void> _ptr;
+
   Expression._(this._ptr) {
     _ExpressionFinalizer.attach(this, _ptr, detach: this);
   }
+
   Expression.abs({required Expression expression})
     : _ptr = rustCall(
         (status) => uniffi_qdrant_edge_ffi_fn_constructor_expression_abs(
@@ -9925,9 +10366,11 @@ class Expression implements ExpressionInterface {
       ) {
     _ExpressionFinalizer.attach(this, _ptr, detach: this);
   }
+
   factory Expression.lift(Pointer<Void> ptr) {
     return Expression._(ptr);
   }
+
   static Pointer<Void> lower(Expression value) {
     return value.uniffiClonePointer();
   }
@@ -9967,8 +10410,8 @@ abstract class EdgeShardInterface {
   FacetResponse facet({required FacetRequest request});
   List<Group> queryGroups({required GroupRequest request});
   ShardInfo info();
-  SearchMatrixResponse searchMatrix({required SearchMatrixRequest request});
   List<ScoredPoint> query({required QueryRequest request});
+  List<List<ScoredPoint>> queryBatch({required List<QueryRequest> requests});
   List<Record> retrieve({required RetrieveRequest request});
   ScrollResponse scroll({required ScrollRequest request});
   List<ScoredPoint> search({required SearchRequest request});
@@ -9997,9 +10440,11 @@ final _EdgeShardFinalizer = Finalizer<Pointer<Void>>((ptr) {
 
 class EdgeShard implements EdgeShardInterface {
   late final Pointer<Void> _ptr;
+
   EdgeShard._(this._ptr) {
     _EdgeShardFinalizer.attach(this, _ptr, detach: this);
   }
+
   EdgeShard.create({required String path, required EdgeConfig config})
     : _ptr = rustCall(
         (status) => uniffi_qdrant_edge_ffi_fn_constructor_edgeshard_create(
@@ -10022,9 +10467,11 @@ class EdgeShard implements EdgeShardInterface {
       ) {
     _EdgeShardFinalizer.attach(this, _ptr, detach: this);
   }
+
   factory EdgeShard.lift(Pointer<Void> ptr) {
     return EdgeShard._(ptr);
   }
+
   static Pointer<Void> lower(EdgeShard value) {
     return value.uniffiClonePointer();
   }
@@ -10105,18 +10552,6 @@ class EdgeShard implements EdgeShardInterface {
     );
   }
 
-  SearchMatrixResponse searchMatrix({required SearchMatrixRequest request}) {
-    return rustCallWithLifter(
-      (status) => uniffi_qdrant_edge_ffi_fn_method_edgeshard_search_matrix(
-        uniffiClonePointer(),
-        FfiConverterSearchMatrixRequest.lower(request),
-        status,
-      ),
-      FfiConverterSearchMatrixResponse.lift,
-      edgeExceptionErrorHandler,
-    );
-  }
-
   List<ScoredPoint> query({required QueryRequest request}) {
     return rustCallWithLifter(
       (status) => uniffi_qdrant_edge_ffi_fn_method_edgeshard_query(
@@ -10125,6 +10560,18 @@ class EdgeShard implements EdgeShardInterface {
         status,
       ),
       FfiConverterSequenceScoredPoint.lift,
+      edgeExceptionErrorHandler,
+    );
+  }
+
+  List<List<ScoredPoint>> queryBatch({required List<QueryRequest> requests}) {
+    return rustCallWithLifter(
+      (status) => uniffi_qdrant_edge_ffi_fn_method_edgeshard_query_batch(
+        uniffiClonePointer(),
+        FfiConverterSequenceQueryRequest.lower(requests),
+        status,
+      ),
+      FfiConverterSequenceSequenceScoredPoint.lift,
       edgeExceptionErrorHandler,
     );
   }
@@ -10296,9 +10743,11 @@ final _UpdateOperationFinalizer = Finalizer<Pointer<Void>>((ptr) {
 
 class UpdateOperation implements UpdateOperationInterface {
   late final Pointer<Void> _ptr;
+
   UpdateOperation._(this._ptr) {
     _UpdateOperationFinalizer.attach(this, _ptr, detach: this);
   }
+
   UpdateOperation.clearPayload({required List<PointId> pointIds})
     : _ptr = rustCall(
         (status) =>
@@ -10575,9 +11024,11 @@ class UpdateOperation implements UpdateOperationInterface {
        ) {
     _UpdateOperationFinalizer.attach(this, _ptr, detach: this);
   }
+
   factory UpdateOperation.lift(Pointer<Void> ptr) {
     return UpdateOperation._(ptr);
   }
+
   static Pointer<Void> lower(UpdateOperation value) {
     return value.uniffiClonePointer();
   }
@@ -10622,9 +11073,12 @@ class UniffiInternalError implements Exception {
   static const int unexpectedRustCallError = 6;
   static const int unexpectedStaleHandle = 7;
   static const int rustPanic = 8;
+
   final int errorCode;
   final String? panicMessage;
+
   const UniffiInternalError(this.errorCode, this.panicMessage);
+
   static UniffiInternalError panicked(String message) {
     return UniffiInternalError(rustPanic, message);
   }
@@ -10663,6 +11117,7 @@ const int CALL_UNEXPECTED_ERROR = 2;
 final class RustCallStatus extends Struct {
   @Int8()
   external int code;
+
   external RustBuffer errorBuf;
 }
 
@@ -10733,9 +11188,12 @@ abstract class UniffiRustCallStatusErrorHandler {
 final class RustBuffer extends Struct {
   @Uint64()
   external int capacity;
+
   @Uint64()
   external int len;
+
   external Pointer<Uint8> data;
+
   static RustBuffer alloc(int size) {
     return rustCall(
       (status) => ffi_qdrant_edge_ffi_rustbuffer_alloc(size, status),
@@ -10776,9 +11234,11 @@ final class RustBuffer extends Struct {
 
 RustBuffer toRustBuffer(Uint8List data) {
   final length = data.length;
+
   final Pointer<Uint8> frameData = calloc<Uint8>(length);
   final pointerList = frameData.asTypedList(length);
   pointerList.setAll(0, data);
+
   final bytes = calloc<ForeignBytes>();
   bytes.ref.len = length;
   bytes.ref.data = frameData;
@@ -10789,6 +11249,7 @@ final class ForeignBytes extends Struct {
   @Int32()
   external int len;
   external Pointer<Uint8> data;
+
   void free() {
     calloc.free(data);
   }
@@ -10798,6 +11259,7 @@ class LiftRetVal<T> {
   final T value;
   final int bytesRead;
   const LiftRetVal(this.value, this.bytesRead);
+
   LiftRetVal<T> copyWithOffset(int offset) {
     return LiftRetVal(value, bytesRead + offset);
   }
@@ -10805,6 +11267,7 @@ class LiftRetVal<T> {
 
 abstract class FfiConverter<D, F> {
   const FfiConverter();
+
   D lift(F value);
   F lower(D value);
   D read(ByteData buffer, int offset);
@@ -10815,20 +11278,25 @@ abstract class FfiConverter<D, F> {
 mixin FfiConverterPrimitive<T> on FfiConverter<T, T> {
   @override
   T lift(T value) => value;
+
   @override
   T lower(T value) => value;
 }
 
 Uint8List createUint8ListFromInt(int value) {
   int length = value.bitLength ~/ 8 + 1;
+
   if (length != 4 && length != 8) {
     length = (value < 0x100000000) ? 4 : 8;
   }
+
   Uint8List uint8List = Uint8List(length);
+
   for (int i = length - 1; i >= 0; i--) {
     uint8List[i] = value & 0xFF;
     value >>= 8;
   }
+
   return uint8List;
 }
 
@@ -10861,6 +11329,7 @@ class FfiConverterBool {
 
 class FfiConverterDouble32 {
   static double lift(double value) => value;
+
   static LiftRetVal<double> read(Uint8List buf) {
     return LiftRetVal(
       buf.buffer.asByteData(buf.offsetInBytes).getFloat32(0),
@@ -10869,6 +11338,7 @@ class FfiConverterDouble32 {
   }
 
   static double lower(double value) => value;
+
   static int allocationSize([double value = 0]) {
     return 4;
   }
@@ -10881,6 +11351,7 @@ class FfiConverterDouble32 {
 
 class FfiConverterDouble64 {
   static double lift(double value) => value;
+
   static LiftRetVal<double> read(Uint8List buf) {
     return LiftRetVal(
       buf.buffer.asByteData(buf.offsetInBytes).getFloat64(0),
@@ -10889,6 +11360,7 @@ class FfiConverterDouble64 {
   }
 
   static double lower(double value) => value;
+
   static int allocationSize([double value = 0]) {
     return 8;
   }
@@ -10901,6 +11373,7 @@ class FfiConverterDouble64 {
 
 class FfiConverterInt64 {
   static int lift(int value) => value;
+
   static LiftRetVal<int> read(Uint8List buf) {
     return LiftRetVal(buf.buffer.asByteData(buf.offsetInBytes).getInt64(0), 8);
   }
@@ -11227,11 +11700,15 @@ class FfiConverterOptionalBinaryQuantizationEncoding {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length =
         FfiConverterOptionalBinaryQuantizationEncoding.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalBinaryQuantizationEncoding.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11243,7 +11720,9 @@ class FfiConverterOptionalBinaryQuantizationEncoding {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterBinaryQuantizationEncoding.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11284,13 +11763,17 @@ class FfiConverterOptionalBinaryQuantizationQueryEncoding {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length =
         FfiConverterOptionalBinaryQuantizationQueryEncoding.allocationSize(
           value,
         );
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalBinaryQuantizationQueryEncoding.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11302,7 +11785,9 @@ class FfiConverterOptionalBinaryQuantizationQueryEncoding {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterBinaryQuantizationQueryEncoding.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11337,10 +11822,14 @@ class FfiConverterOptionalBool {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalBool.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalBool.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11352,7 +11841,9 @@ class FfiConverterOptionalBool {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterBool.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11387,10 +11878,14 @@ class FfiConverterOptionalDirection {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalDirection.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalDirection.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11402,7 +11897,9 @@ class FfiConverterOptionalDirection {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterDirection.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11437,10 +11934,14 @@ class FfiConverterOptionalDouble32 {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalDouble32.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalDouble32.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11452,7 +11953,9 @@ class FfiConverterOptionalDouble32 {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterDouble32.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11487,10 +11990,14 @@ class FfiConverterOptionalDouble64 {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalDouble64.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalDouble64.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11502,7 +12009,9 @@ class FfiConverterOptionalDouble64 {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterDouble64.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11537,10 +12046,14 @@ class FfiConverterOptionalEdgeConfig {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalEdgeConfig.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalEdgeConfig.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11552,7 +12065,9 @@ class FfiConverterOptionalEdgeConfig {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterEdgeConfig.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11587,10 +12102,14 @@ class FfiConverterOptionalExpression {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalExpression.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalExpression.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11602,7 +12121,9 @@ class FfiConverterOptionalExpression {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return Expression.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11637,10 +12158,14 @@ class FfiConverterOptionalFilter {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalFilter.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalFilter.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11652,7 +12177,9 @@ class FfiConverterOptionalFilter {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterFilter.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11687,10 +12214,14 @@ class FfiConverterOptionalGeoBoundingBox {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalGeoBoundingBox.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalGeoBoundingBox.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11702,7 +12233,9 @@ class FfiConverterOptionalGeoBoundingBox {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterGeoBoundingBox.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11737,10 +12270,14 @@ class FfiConverterOptionalGeoPolygon {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalGeoPolygon.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalGeoPolygon.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11752,7 +12289,9 @@ class FfiConverterOptionalGeoPolygon {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterGeoPolygon.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11787,10 +12326,14 @@ class FfiConverterOptionalGeoRadius {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalGeoRadius.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalGeoRadius.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11802,7 +12345,9 @@ class FfiConverterOptionalGeoRadius {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterGeoRadius.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11837,10 +12382,14 @@ class FfiConverterOptionalHnswIndexConfig {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalHnswIndexConfig.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalHnswIndexConfig.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11852,7 +12401,9 @@ class FfiConverterOptionalHnswIndexConfig {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterHnswIndexConfig.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11887,10 +12438,14 @@ class FfiConverterOptionalMatch {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalMatch.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalMatch.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11902,7 +12457,9 @@ class FfiConverterOptionalMatch {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterMatch.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11937,10 +12494,14 @@ class FfiConverterOptionalMemory {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalMemory.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalMemory.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -11952,7 +12513,9 @@ class FfiConverterOptionalMemory {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterMemory.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -11987,10 +12550,14 @@ class FfiConverterOptionalMinShould {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalMinShould.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalMinShould.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12002,7 +12569,9 @@ class FfiConverterOptionalMinShould {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterMinShould.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12037,10 +12606,14 @@ class FfiConverterOptionalModifier {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalModifier.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalModifier.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12052,7 +12625,9 @@ class FfiConverterOptionalModifier {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterModifier.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12087,10 +12662,14 @@ class FfiConverterOptionalMultiVectorConfig {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalMultiVectorConfig.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalMultiVectorConfig.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12102,7 +12681,9 @@ class FfiConverterOptionalMultiVectorConfig {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterMultiVectorConfig.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12137,10 +12718,14 @@ class FfiConverterOptionalOrderBy {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalOrderBy.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalOrderBy.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12152,7 +12737,9 @@ class FfiConverterOptionalOrderBy {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterOrderBy.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12187,10 +12774,14 @@ class FfiConverterOptionalOrderValue {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalOrderValue.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalOrderValue.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12202,7 +12793,9 @@ class FfiConverterOptionalOrderValue {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterOrderValue.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12237,10 +12830,14 @@ class FfiConverterOptionalPayloadIndexParams {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalPayloadIndexParams.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalPayloadIndexParams.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12252,7 +12849,9 @@ class FfiConverterOptionalPayloadIndexParams {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterPayloadIndexParams.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12287,10 +12886,14 @@ class FfiConverterOptionalPointId {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalPointId.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalPointId.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12302,7 +12905,9 @@ class FfiConverterOptionalPointId {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterPointId.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12337,10 +12942,14 @@ class FfiConverterOptionalQuantizationConfig {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalQuantizationConfig.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalQuantizationConfig.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12352,7 +12961,9 @@ class FfiConverterOptionalQuantizationConfig {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterQuantizationConfig.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12387,10 +12998,14 @@ class FfiConverterOptionalRangeDatetime {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalRangeDatetime.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalRangeDatetime.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12402,7 +13017,9 @@ class FfiConverterOptionalRangeDatetime {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterRangeDatetime.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12437,10 +13054,14 @@ class FfiConverterOptionalRangeFloat {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalRangeFloat.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalRangeFloat.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12452,7 +13073,9 @@ class FfiConverterOptionalRangeFloat {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterRangeFloat.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12487,10 +13110,14 @@ class FfiConverterOptionalRecommendStrategy {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalRecommendStrategy.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalRecommendStrategy.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12502,7 +13129,9 @@ class FfiConverterOptionalRecommendStrategy {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterRecommendStrategy.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12537,10 +13166,14 @@ class FfiConverterOptionalScoringQuery {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalScoringQuery.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalScoringQuery.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12552,7 +13185,9 @@ class FfiConverterOptionalScoringQuery {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterScoringQuery.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12587,10 +13222,14 @@ class FfiConverterOptionalSearchParams {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalSearchParams.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalSearchParams.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12602,7 +13241,9 @@ class FfiConverterOptionalSearchParams {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterSearchParams.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12637,10 +13278,14 @@ class FfiConverterOptionalSequenceCondition {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalSequenceCondition.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalSequenceCondition.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12652,7 +13297,9 @@ class FfiConverterOptionalSequenceCondition {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterSequenceCondition.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12687,10 +13334,14 @@ class FfiConverterOptionalSequenceDouble32 {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalSequenceDouble32.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalSequenceDouble32.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12702,7 +13353,9 @@ class FfiConverterOptionalSequenceDouble32 {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterSequenceDouble32.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12739,12 +13392,16 @@ class FfiConverterOptionalSequenceGeoLineString {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalSequenceGeoLineString.allocationSize(
       value,
     );
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalSequenceGeoLineString.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12756,7 +13413,9 @@ class FfiConverterOptionalSequenceGeoLineString {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterSequenceGeoLineString.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12791,10 +13450,14 @@ class FfiConverterOptionalSequenceLanguage {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalSequenceLanguage.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalSequenceLanguage.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12806,7 +13469,9 @@ class FfiConverterOptionalSequenceLanguage {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterSequenceLanguage.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12841,10 +13506,14 @@ class FfiConverterOptionalSequenceString {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalSequenceString.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalSequenceString.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12856,7 +13525,9 @@ class FfiConverterOptionalSequenceString {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterSequenceString.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12891,10 +13562,14 @@ class FfiConverterOptionalStartFrom {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalStartFrom.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalStartFrom.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12906,7 +13581,9 @@ class FfiConverterOptionalStartFrom {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterStartFrom.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12941,10 +13618,14 @@ class FfiConverterOptionalStemmer {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalStemmer.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalStemmer.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -12956,7 +13637,9 @@ class FfiConverterOptionalStemmer {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterStemmer.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -12991,10 +13674,14 @@ class FfiConverterOptionalStopwords {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalStopwords.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalStopwords.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -13006,7 +13693,9 @@ class FfiConverterOptionalStopwords {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterStopwords.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -13041,10 +13730,14 @@ class FfiConverterOptionalString {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalString.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalString.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -13056,7 +13749,9 @@ class FfiConverterOptionalString {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterString.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -13091,10 +13786,14 @@ class FfiConverterOptionalTokenizerType {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalTokenizerType.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalTokenizerType.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -13106,7 +13805,9 @@ class FfiConverterOptionalTokenizerType {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterTokenizerType.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -13141,10 +13842,14 @@ class FfiConverterOptionalTurboQuantBitSize {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalTurboQuantBitSize.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalTurboQuantBitSize.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -13156,7 +13861,9 @@ class FfiConverterOptionalTurboQuantBitSize {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterTurboQuantBitSize.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -13191,10 +13898,14 @@ class FfiConverterOptionalUInt64 {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalUInt64.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalUInt64.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -13206,7 +13917,9 @@ class FfiConverterOptionalUInt64 {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterUInt64.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -13241,10 +13954,14 @@ class FfiConverterOptionalUpdateMode {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalUpdateMode.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalUpdateMode.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -13256,7 +13973,9 @@ class FfiConverterOptionalUpdateMode {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterUpdateMode.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -13291,10 +14010,14 @@ class FfiConverterOptionalValuesCount {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalValuesCount.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalValuesCount.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -13306,7 +14029,9 @@ class FfiConverterOptionalValuesCount {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterValuesCount.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -13346,12 +14071,16 @@ class FfiConverterOptionalVectorStorageDatatype {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalVectorStorageDatatype.allocationSize(
       value,
     );
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalVectorStorageDatatype.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -13363,7 +14092,9 @@ class FfiConverterOptionalVectorStorageDatatype {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterVectorStorageDatatype.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -13398,10 +14129,14 @@ class FfiConverterOptionalWithPayload {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalWithPayload.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalWithPayload.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -13413,7 +14148,9 @@ class FfiConverterOptionalWithPayload {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterWithPayload.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -13448,10 +14185,14 @@ class FfiConverterOptionalWithVector {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
+
     final length = FfiConverterOptionalWithVector.allocationSize(value);
+
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
+
     FfiConverterOptionalWithVector.write(value, buf);
+
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
@@ -13463,7 +14204,9 @@ class FfiConverterOptionalWithVector {
       buf[0] = 0;
       return 1;
     }
+
     buf[0] = 1;
+
     return FfiConverterWithVector.write(
           value,
           Uint8List.view(buf.buffer, buf.offsetInBytes + 1),
@@ -14169,6 +14912,51 @@ class FfiConverterSequencePrefetch {
   }
 }
 
+class FfiConverterSequenceQueryRequest {
+  static List<QueryRequest> lift(RustBuffer buf) {
+    return FfiConverterSequenceQueryRequest.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<QueryRequest>> read(Uint8List buf) {
+    List<QueryRequest> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret = FfiConverterQueryRequest.read(
+        Uint8List.view(buf.buffer, offset),
+      );
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<QueryRequest> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterQueryRequest.write(
+        value[i],
+        Uint8List.view(buf.buffer, offset),
+      );
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<QueryRequest> value) {
+    return value
+            .map((l) => FfiConverterQueryRequest.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<QueryRequest> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
 class FfiConverterSequenceRecord {
   static List<Record> lift(RustBuffer buf) {
     return FfiConverterSequenceRecord.read(buf.asUint8List()).value;
@@ -14463,6 +15251,7 @@ class FfiConverterString {
 
 class FfiConverterUInt32 {
   static int lift(int value) => value;
+
   static LiftRetVal<int> read(Uint8List buf) {
     return LiftRetVal(buf.buffer.asByteData(buf.offsetInBytes).getUint32(0), 4);
   }
@@ -14486,6 +15275,7 @@ class FfiConverterUInt32 {
 
 class FfiConverterUInt64 {
   static int lift(int value) => value;
+
   static LiftRetVal<int> read(Uint8List buf) {
     return LiftRetVal(buf.buffer.asByteData(buf.offsetInBytes).getUint64(0), 8);
   }
@@ -14509,8 +15299,11 @@ class FfiConverterUInt64 {
 
 const int UNIFFI_RUST_FUTURE_POLL_READY = 0;
 const int UNIFFI_RUST_FUTURE_POLL_MAYBE_READY = 1;
+
 typedef UniffiRustFutureContinuationCallback = Void Function(Uint64, Int8);
+
 final _uniffiRustFutureContinuationHandles = UniffiHandleMap<Completer<int>>();
+
 Future<T> uniffiRustCallAsync<T, F>(
   Pointer<Void> Function() rustFutureFunc,
   void Function(
@@ -14528,7 +15321,9 @@ Future<T> uniffiRustCallAsync<T, F>(
   final completer = Completer<int>();
   final handle = _uniffiRustFutureContinuationHandles.insert(completer);
   final callbackData = Pointer<Void>.fromAddress(handle);
+
   late final NativeCallable<UniffiRustFutureContinuationCallback> callback;
+
   void repoll() {
     pollFunc(rustFuture, callback.nativeFunction, callbackData);
   }
@@ -14560,9 +15355,11 @@ Future<T> uniffiRustCallAsync<T, F>(
   callback = NativeCallable<UniffiRustFutureContinuationCallback>.listener(
     onResponse,
   );
+
   try {
     repoll();
     await completer.future;
+
     final status = calloc<RustCallStatus>();
     try {
       final result = completeFunc(rustFuture, status);
@@ -14587,6 +15384,7 @@ class _UniffiForeignFutureState {
 
 final _uniffiForeignFutureHandleMap =
     UniffiHandleMap<_UniffiForeignFutureState>();
+
 void _uniffiForeignFutureFree(int handle) {
   final state = _uniffiForeignFutureHandleMap.maybeRemove(handle);
   if (state != null) {
@@ -14602,12 +15400,14 @@ _uniffiForeignFutureFreePointer = Pointer.fromFunction<UniffiForeignFutureFree>(
 final class UniffiForeignFuture extends Struct {
   @Uint64()
   external int handle;
+
   external Pointer<NativeFunction<UniffiForeignFutureFree>> free;
 }
 
 class UniffiHandleMap<T> {
   final Map<int, T> _map = {};
   int _counter = 1;
+
   int insert(T obj) {
     final handle = _counter;
     _counter += 2;
@@ -14643,6 +15443,7 @@ class UniffiHandleMap<T> {
 }
 
 const _uniffiAssetId = "package:qdrant_edge/uniffi:qdrant_edge_ffi";
+
 void unpackSnapshot({
   required String snapshotPath,
   required String targetPath,
@@ -14906,7 +15707,7 @@ external RustBuffer uniffi_qdrant_edge_ffi_fn_method_edgeshard_info(
 @Native<
   RustBuffer Function(Pointer<Void>, RustBuffer, Pointer<RustCallStatus>)
 >(assetId: _uniffiAssetId)
-external RustBuffer uniffi_qdrant_edge_ffi_fn_method_edgeshard_search_matrix(
+external RustBuffer uniffi_qdrant_edge_ffi_fn_method_edgeshard_query(
   Pointer<Void> ptr,
   RustBuffer request,
   Pointer<RustCallStatus> uniffiStatus,
@@ -14915,9 +15716,9 @@ external RustBuffer uniffi_qdrant_edge_ffi_fn_method_edgeshard_search_matrix(
 @Native<
   RustBuffer Function(Pointer<Void>, RustBuffer, Pointer<RustCallStatus>)
 >(assetId: _uniffiAssetId)
-external RustBuffer uniffi_qdrant_edge_ffi_fn_method_edgeshard_query(
+external RustBuffer uniffi_qdrant_edge_ffi_fn_method_edgeshard_query_batch(
   Pointer<Void> ptr,
-  RustBuffer request,
+  RustBuffer requests,
   Pointer<RustCallStatus> uniffiStatus,
 );
 
@@ -15674,10 +16475,10 @@ external int uniffi_qdrant_edge_ffi_checksum_method_edgeshard_query_groups();
 external int uniffi_qdrant_edge_ffi_checksum_method_edgeshard_info();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
-external int uniffi_qdrant_edge_ffi_checksum_method_edgeshard_search_matrix();
+external int uniffi_qdrant_edge_ffi_checksum_method_edgeshard_query();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
-external int uniffi_qdrant_edge_ffi_checksum_method_edgeshard_query();
+external int uniffi_qdrant_edge_ffi_checksum_method_edgeshard_query_batch();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int uniffi_qdrant_edge_ffi_checksum_method_edgeshard_retrieve();
@@ -15894,11 +16695,10 @@ void _checkApiChecksums() {
   if (uniffi_qdrant_edge_ffi_checksum_method_edgeshard_info() != 55438) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
-  if (uniffi_qdrant_edge_ffi_checksum_method_edgeshard_search_matrix() !=
-      55429) {
+  if (uniffi_qdrant_edge_ffi_checksum_method_edgeshard_query() != 28290) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
-  if (uniffi_qdrant_edge_ffi_checksum_method_edgeshard_query() != 28290) {
+  if (uniffi_qdrant_edge_ffi_checksum_method_edgeshard_query_batch() != 29249) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
   if (uniffi_qdrant_edge_ffi_checksum_method_edgeshard_retrieve() != 25809) {

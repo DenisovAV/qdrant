@@ -1,0 +1,118 @@
+name: Qdrant Edge Dart SDK
+
+# Consistency gate for the Dart/Flutter SDK. The Dart binding is generated from
+# the `qdrant-edge-ffi` crate, so a change to the FFI can silently change or
+# break the SDK. This workflow regenerates the binding from the current FFI,
+# fails if the committed binding drifted, enforces the mobile-safety invariants,
+# runs the Dart test suite against the freshly-built engine, and checks the
+# version is in sync.
+
+on:
+  push:
+    branches: [ master, dev ]
+    paths:
+      - 'lib/edge/ffi/**'
+      - 'lib/edge/src/**'
+      - 'lib/edge/dart/**'
+      - 'lib/edge/VERSION'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.github/workflows/edge-dart.yml'
+  pull_request:
+    branches: [ '**' ]
+    paths:
+      - 'lib/edge/ffi/**'
+      - 'lib/edge/src/**'
+      - 'lib/edge/dart/**'
+      - 'lib/edge/VERSION'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.github/workflows/edge-dart.yml'
+
+permissions:
+  contents: read
+
+env:
+  # The uniffi-bindgen-dart fork carrying uniffi-0.32 + the library-mode CLI +
+  # the enum-collision fix (upstream lacks them; PRs pending).
+  UNIFFI_DART_REPO: https://github.com/DenisovAV/uniffi-dart.git
+  UNIFFI_DART_REF: library-mode-cli
+
+jobs:
+  edge-dart:
+    name: Build & test Dart SDK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Qdrant
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      # Pure text check, no build — run first so a version skew fails in seconds.
+      - name: Version sync
+        run: |
+          set -euo pipefail
+          version="$(tr -d '[:space:]' < lib/edge/VERSION)"
+          crate="$(grep -m1 '^version = ' lib/edge/ffi/Cargo.toml | sed -E 's/.*"([^"]+)".*/\1/')"
+          pubspec="$(grep -m1 '^version:' lib/edge/dart/pubspec.yaml | sed -E 's/version:[[:space:]]*//' | tr -d '[:space:]')"
+          if [ "$version" != "$crate" ] || [ "$version" != "$pubspec" ]; then
+            echo "::error::version skew — VERSION=$version crate=$crate pubspec=$pubspec"
+            exit 1
+          fi
+          echo "OK: version $version in sync (VERSION == crate == pubspec)"
+
+      - name: Install Rust nightly
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Install Protoc
+        uses: ./.github/actions/setup-protoc
+
+      - name: Install Dart
+        uses: dart-lang/setup-dart@v1
+
+      # Build the bindgen from the fork (upstream lacks the required PRs).
+      - name: Build uniffi-bindgen-dart (fork)
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch "$UNIFFI_DART_REF" "$UNIFFI_DART_REPO" /tmp/uniffi-dart
+          ( cd /tmp/uniffi-dart && cargo +nightly build --release --features binary --bin uniffi_bindgen_dart )
+          echo "UNIFFI_BINDGEN_DART=/tmp/uniffi-dart/target/release/uniffi_bindgen_dart" >> "$GITHUB_ENV"
+
+      # Regenerate the committed binding and fail if it drifted from the crate.
+      - name: Regenerate binding and check it is in sync
+        working-directory: lib/edge/dart
+        run: |
+          set -euo pipefail
+          ./build.sh
+          if ! git diff --quiet -- lib/src/qdrant_edge_ffi.dart; then
+            echo "::error::lib/src/qdrant_edge_ffi.dart is stale — run ./build.sh and commit"
+            git --no-pager diff -- lib/src/qdrant_edge_ffi.dart | head -80
+            exit 1
+          fi
+          echo "OK: committed binding matches the FFI crate"
+
+      # Fail-closed mobile-safety gate: --no-default-features must drop search_matrix.
+      - name: Enforce search_matrix exclusion
+        working-directory: lib/edge/dart
+        run: |
+          set -euo pipefail
+          f=lib/src/qdrant_edge_ffi.dart
+          if grep -qiE 'search_?matrix|searchMatrix' "$f"; then
+            echo "::error::search_matrix present in $f (expected --no-default-features to drop it)"
+            exit 1
+          fi
+          # Canary: the gate must see a symbol that is definitely present.
+          if ! grep -q 'edgeshard_search' "$f"; then
+            echo "::error::canary failed — 'edgeshard_search' absent; scanning the wrong file"
+            exit 1
+          fi
+          echo "OK: search_matrix absent from the surface (canary present)"
+
+      # `dart test` runs hook/build.dart (builds the host cdylib) then the suite.
+      - name: Dart analyze + test
+        working-directory: lib/edge/dart
+        run: |
+          set -euo pipefail
+          dart pub get
+          dart analyze lib test hook example
+          dart test
