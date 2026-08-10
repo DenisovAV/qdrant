@@ -47,7 +47,12 @@ void main(List<String> args) async {
       final dest = input.outputDirectory.resolve(src.pathSegments.last);
       final s = File.fromUri(src);
       final d = File.fromUri(dest);
-      if (!d.existsSync() || d.lengthSync() != s.lengthSync()) {
+      // Re-stage when the dest is missing, a different size, OR older than the
+      // source: a rebuilt cdylib is frequently the SAME size, so a size-only
+      // check would keep a stale staged copy.
+      if (!d.existsSync() ||
+          d.lengthSync() != s.lengthSync() ||
+          d.statSync().modified.isBefore(s.statSync().modified)) {
         d.parent.createSync(recursive: true);
         s.copySync(dest.toFilePath());
       }

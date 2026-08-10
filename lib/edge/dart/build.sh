@@ -24,7 +24,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-export PATH="$PATH:$HOME/.cargo/bin"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 echo "==> Building qdrant-edge-ffi cdylib (host, nightly, --no-default-features)…"
 ( cd "$WORKSPACE_ROOT" && cargo +nightly build --locked --no-default-features -p qdrant-edge-ffi )
@@ -57,7 +57,7 @@ echo "==> Generating curated public facade lib/qdrant_edge.dart…"
 types="$(grep -oE '^(class|enum|abstract class|final class|sealed class|mixin|extension|typedef) [A-Za-z_][A-Za-z0-9_]*' \
     "$SCRIPT_DIR/lib/src/qdrant_edge_ffi.dart" \
   | awk '{print $NF}' \
-  | grep -vE '^(FfiConverter|Uniffi|Rust|Foreign|LiftRetVal|_)' \
+  | grep -vE '^(FfiConverter|Uniffi|Rust|Foreign|LiftRetVal|_)|ErrorHandler$' \
   | sort -u)"
 {
   cat <<'HEADER'

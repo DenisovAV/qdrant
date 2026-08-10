@@ -6,8 +6,9 @@ import 'package:qdrant_edge/qdrant_edge.dart';
 /// Run with `dart run` (the Native Assets build hook builds the engine).
 void main() {
   final dir = Directory.systemTemp.createTempSync('qdrant_edge_example_');
+  EdgeShard? shard;
   try {
-    final shard = EdgeShard.load(
+    shard = EdgeShard.load(
       path: dir.path,
       config: EdgeConfig(
         vectorData: {'': VectorDataConfig(size: 4, distance: Distance.dot)},
@@ -35,8 +36,8 @@ void main() {
       print('id=$id  score=${r.score.toStringAsFixed(3)}  payload=${r.payload}');
     }
 
-    shard.unload();
   } finally {
+    shard?.unload();
     dir.deleteSync(recursive: true);
   }
 }

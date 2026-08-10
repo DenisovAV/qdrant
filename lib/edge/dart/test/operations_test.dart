@@ -67,7 +67,12 @@ void main() {
       seed(s, 3);
 
       expect(s.config().vectorData.keys, contains(''));
-      expect(s.path(), dir.path);
+      // Canonicalize both: Directory.systemTemp is under /var, a symlink to
+      // /private/var on macOS, and the engine may return the resolved form.
+      expect(
+        Directory(s.path()).resolveSymbolicLinksSync(),
+        Directory(dir.path).resolveSymbolicLinksSync(),
+      );
       final info = s.info();
       expect(info.pointsCount, 3);
       s.flush();

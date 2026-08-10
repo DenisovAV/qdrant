@@ -34,9 +34,12 @@ permissions:
 
 env:
   # The uniffi-bindgen-dart fork carrying uniffi-0.32 + the library-mode CLI +
-  # the enum-collision fix (upstream lacks them; PRs pending).
+  # the enum-collision fix (upstream lacks them; PRs pending — #149/#151/#152).
+  # Pinned to a REVIEWED COMMIT, not the mutable `library-mode-cli` branch, so a
+  # branch update can't silently change the generated binding this CI builds.
   UNIFFI_DART_REPO: https://github.com/DenisovAV/uniffi-dart.git
-  UNIFFI_DART_REF: library-mode-cli
+  # library-mode-cli @ 8b63861 (bump when intentionally adopting fork changes)
+  UNIFFI_DART_REF: 8b63861b9a10ac0fc8f25047a4f79bcde955731d
 
 jobs:
   edge-dart:
@@ -74,7 +77,8 @@ jobs:
       - name: Build uniffi-bindgen-dart (fork)
         run: |
           set -euo pipefail
-          git clone --depth 1 --branch "$UNIFFI_DART_REF" "$UNIFFI_DART_REPO" /tmp/uniffi-dart
+          git clone "$UNIFFI_DART_REPO" /tmp/uniffi-dart
+          git -C /tmp/uniffi-dart checkout --detach "$UNIFFI_DART_REF"
           ( cd /tmp/uniffi-dart && cargo +nightly build --release --features binary --bin uniffi_bindgen_dart )
           echo "UNIFFI_BINDGEN_DART=/tmp/uniffi-dart/target/release/uniffi_bindgen_dart" >> "$GITHUB_ENV"
 
