@@ -98,13 +98,19 @@ void main(List<String> args) async {
     // lib/edge/dart/ -> the Cargo workspace root is three levels up.
     final workspaceRoot = input.packageRoot.resolve('../../../');
     final cargoBin = '${Platform.environment['HOME'] ?? ''}/.cargo/bin';
+    // `+nightly` is a rustup directive that ONLY rustup's cargo shim understands.
+    // Under an Xcode/Gradle build environment a Homebrew `cargo` is often first
+    // on PATH and fails with "no such command: +nightly", so invoke the rustup
+    // cargo by absolute path and PREPEND ~/.cargo/bin (the rustup shim must win).
+    final rustupCargo =
+        File('$cargoBin/cargo').existsSync() ? '$cargoBin/cargo' : 'cargo';
     final result = await Process.run(
-      'cargo',
+      rustupCargo,
       ['+nightly', 'build', '--locked', '--no-default-features', '-p', 'qdrant-edge-ffi'],
       workingDirectory: workspaceRoot.toFilePath(),
       environment: {
         ...Platform.environment,
-        'PATH': '${Platform.environment['PATH']}:$cargoBin',
+        'PATH': '$cargoBin:${Platform.environment['PATH']}',
       },
     );
     if (result.exitCode != 0) {
