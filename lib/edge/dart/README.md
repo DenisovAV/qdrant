@@ -39,8 +39,8 @@ persistence, and error-path coverage.
 `lib/qdrant_edge.dart` re-exports the generated binding through an explicit
 `show` list, so the public surface is only the **domain** API (`EdgeShard`,
 `EdgeConfig`, `Point`, the query/filter/vector/error types, …). The UniFFI
-plumbing (`FfiConverter*`, `RustBuffer`, the raw `@Native` C functions) lives in
-`lib/src/` and is **not** exported — it stays out of the package's semver
+plumbing (`FfiConverter*`, `RustBuffer`, the call-status `*ErrorHandler`s, the
+raw `@Native` C functions) lives in `lib/src/` and is **not** exported — it stays out of the package's semver
 contract, so a future UniFFI bump can reshape it without breaking consumers.
 (Swift achieves the same by demoting plumbing to `internal`; Dart does it for
 free with a `show` list, which Kotlin/JVM cannot.)

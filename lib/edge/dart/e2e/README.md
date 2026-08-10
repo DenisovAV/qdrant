@@ -1,17 +1,20 @@
 # qdrant_edge_e2e
 
-A new Flutter project.
+On-device operation-coverage harness for the Qdrant Edge Dart SDK
+(`qdrant_edge`, a path dependency on `../`). It runs the **full operation suite**
+against the native engine on Android, iOS, macOS, Linux, and Windows via the
+Flutter `integration_test` framework — the same 33 scenarios as
+`../test/operations_test.dart`, but executed on a real device runtime.
 
-## Getting Started
+## Run
 
-This project is a starting point for a Flutter application.
+```sh
+flutter test integration_test/operations_test.dart -d <device-id>
+```
 
-A few resources to get you started if this is your first Flutter project:
+On desktop OSes the SDK's Native Assets hook builds the engine from source; on
+iOS/Android it uses the prebuilt cdylib provisioned by the hook. CI runs this via
+`.github/workflows/edge-dart-device.yml`.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+`integration_test/operations_test.dart` mirrors `../test/operations_test.dart`
+(the plain `dart test` version) — keep both in sync when SDK behaviour changes.

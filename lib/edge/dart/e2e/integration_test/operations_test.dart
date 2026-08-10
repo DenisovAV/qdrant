@@ -30,9 +30,12 @@ EdgeShard openShard(EdgeConfig config) {
   final dir = Directory.systemTemp.createTempSync('qe_ops_');
   final shard = EdgeShard.load(path: dir.path, config: config);
   addTearDown(() {
+    // Best-effort close: a test may already have unloaded the shard, which the
+    // engine reports as an EdgeException. Only that is swallowed — a Dart error
+    // (e.g. a bug in cleanup) still surfaces.
     try {
       shard.unload();
-    } catch (_) {}
+    } on EdgeException catch (_) {}
     if (dir.existsSync()) dir.deleteSync(recursive: true);
   });
   return shard;
