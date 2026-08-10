@@ -97,20 +97,31 @@ void main(List<String> args) async {
 
     // lib/edge/dart/ -> the Cargo workspace root is three levels up.
     final workspaceRoot = input.packageRoot.resolve('../../../');
-    final cargoBin = '${Platform.environment['HOME'] ?? ''}/.cargo/bin';
     // `+nightly` is a rustup directive that ONLY rustup's cargo shim understands.
     // Under an Xcode/Gradle build environment a Homebrew `cargo` is often first
     // on PATH and fails with "no such command: +nightly", so invoke the rustup
     // cargo by absolute path and PREPEND ~/.cargo/bin (the rustup shim must win).
+    // Path-separator, home var, and exe suffix are all platform-specific (this
+    // hook builds from source on Windows/Linux/macOS hosts alike).
+    final sep = Platform.pathSeparator;
+    final home = Platform.environment['HOME'] ??
+        Platform.environment['USERPROFILE'] ??
+        '';
+    final cargoBin = home.isEmpty ? '' : '$home$sep.cargo${sep}bin';
+    final cargoExe = Platform.isWindows ? 'cargo.exe' : 'cargo';
     final rustupCargo =
-        File('$cargoBin/cargo').existsSync() ? '$cargoBin/cargo' : 'cargo';
+        cargoBin.isNotEmpty && File('$cargoBin$sep$cargoExe').existsSync()
+            ? '$cargoBin$sep$cargoExe'
+            : 'cargo';
+    final pathListSep = Platform.isWindows ? ';' : ':';
+    final envPath = Platform.environment['PATH'] ?? '';
     final result = await Process.run(
       rustupCargo,
       ['+nightly', 'build', '--locked', '--no-default-features', '-p', 'qdrant-edge-ffi'],
       workingDirectory: workspaceRoot.toFilePath(),
       environment: {
         ...Platform.environment,
-        'PATH': '$cargoBin:${Platform.environment['PATH']}',
+        'PATH': cargoBin.isEmpty ? envPath : '$cargoBin$pathListSep$envPath',
       },
     );
     if (result.exitCode != 0) {
