@@ -90,8 +90,10 @@ them with a `checksums.txt`. Those SHA256 lines are pinned into the `_sha256`
 table in `hook/build.dart` — the download path stays inert until they are, so a
 tampered or truncated archive can never be linked in.
 
-`publish_to: none` remains until the first native-prebuilt release is cut and its
-checksums pinned; flipping it (and choosing the pub.dev name) is the last gate.
+The native-prebuilt release (`edge-dart-native-v0.8.0`) is cut and its checksums
+are pinned, so the package is publishable: it ships to pub.dev as `qdrant_edge`
+with `native/` and the on-device harness excluded via `.pubignore` (a ~54 KB
+archive — the engine is downloaded, never bundled).
 
 ## Versioning
 

@@ -3,9 +3,15 @@ description: >-
   On-device vector search for Dart and Flutter, powered by the qdrant-edge Rust
   engine through UniFFI — the same shared FFI crate as the Swift and Kotlin SDKs.
 version: 0.8.0
-# Published to pub.dev from a dedicated release step (see README "Distribution"),
-# not from the monorepo path.
-publish_to: none
+repository: https://github.com/qdrant/qdrant
+homepage: https://qdrant.tech/documentation/edge/
+issue_tracker: https://github.com/qdrant/qdrant/issues
+topics:
+  - vector-search
+  - embeddings
+  - database
+  - ffi
+  - on-device
 
 environment:
   sdk: ">=3.12.0 <4.0.0"
