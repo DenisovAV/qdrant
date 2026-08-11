@@ -11,11 +11,13 @@ environment:
   sdk: ">=3.12.0 <4.0.0"
 
 # `hooks` + `code_assets` drive the Native Assets build hook (hook/build.dart);
-# `ffi` backs the generated `@Native` bindings.
+# `ffi` backs the generated `@Native` bindings; `crypto` SHA256-verifies the
+# prebuilt cdylibs the hook downloads from the release (see README "Distribution").
 dependencies:
   ffi: ^2.1.0
   hooks: ^2.0.0
   code_assets: ^1.2.0
+  crypto: ^3.0.0
 
 dev_dependencies:
   test: ^1.24.0

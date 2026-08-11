@@ -68,15 +68,30 @@ free with a `show` list, which Kotlin/JVM cannot.)
 
 ## Distribution
 
-`hook/build.dart` here is the **monorepo/development** hook: it builds a **host**
-cdylib from source, so it needs the nightly Rust toolchain and protobuf. This is
-why the package is **not consumable off pub.dev or as a `git:` dependency yet** —
-a consumer has no Cargo workspace, and this hook cannot cross-compile for a
-device/emulator (it fails fast if asked to). A release swaps it for a
-**prebuilt-download** hook that fetches per-platform, checksum-pinned cdylibs from
-a GitHub release — the same shape the Kotlin AAR and Swift XCFramework releases
-use. `publish_to: none` guards against an accidental publish until then. That
-release step is follow-up work.
+`hook/build.dart` provisions the engine three ways, in priority order, so the
+**same** hook serves both an in-tree developer and a pub.dev consumer:
+
+1. **Local prebuilt** — `native/prebuilt/<os_arch>/` (or `$QDRANT_EDGE_PREBUILT_DIR`).
+   A dev/CI override, e.g. dropping in a locally cross-built device library.
+2. **From source (host, in-tree)** — when the target is the host OS *and* the
+   Cargo workspace is present, build with `cargo +nightly` (needs the nightly
+   toolchain + protobuf). This is the fast path while developing inside the
+   monorepo; incremental rebuilds re-run only when a source dir changes.
+3. **Download** — otherwise fetch the per-platform, **SHA256-pinned** archive
+   from the GitHub Release (`edge-dart-native-v$VERSION`) and cache it under the
+   platform cache dir. This is how a consumer with no Rust toolchain, and every
+   cross-compile (device/emulator) target, is served — the same shape the Kotlin
+   AAR and Swift XCFramework releases use.
+
+`.github/workflows/edge-dart-native.yml` builds the eight cdylibs (Linux
+x86_64/arm64, Windows x86_64, macOS arm64, iOS arm64 device/simulator, Android
+arm64/x86_64), packages each as `qdrant-edge-ffi-<os_arch>.tar.gz`, and publishes
+them with a `checksums.txt`. Those SHA256 lines are pinned into the `_sha256`
+table in `hook/build.dart` — the download path stays inert until they are, so a
+tampered or truncated archive can never be linked in.
+
+`publish_to: none` remains until the first native-prebuilt release is cut and its
+checksums pinned; flipping it (and choosing the pub.dev name) is the last gate.
 
 ## Versioning
 
