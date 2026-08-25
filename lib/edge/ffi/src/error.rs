@@ -4,10 +4,12 @@ use segment::json_path::JsonPath;
 /// The error type returned from fallible `EdgeShard` operations and
 /// `UpdateOperation` constructors.
 ///
-/// Three branchable variants let Swift/Kotlin hosts pattern-match on the error
+/// Four branchable variants let Swift/Kotlin hosts pattern-match on the error
 /// category:
 ///
 /// - `ShardClosed` — the shard has been unloaded; reopen it via `load`.
+/// - `ShardLocked` — another live handle already holds the shard; recoverable,
+///   distinct from corruption (close the other handle or retry).
 /// - `InvalidArgument` — host-supplied input was invalid; fix it and retry.
 /// - `OperationError` — any other engine failure (I/O, missing index, etc.).
 ///
@@ -24,6 +26,8 @@ use segment::json_path::JsonPath;
 ///     let shard = try EdgeShard.load(path: dataDir, config: nil)
 /// } catch EdgeError.shardClosed {
 ///     print("Shard is closed — reopen it first")
+/// } catch EdgeError.shardLocked {
+///     print("Another handle has this shard open — retry or close it first")
 /// } catch let EdgeError.invalidArgument(reason) {
 ///     print("Bad input: \(reason)")
 /// } catch let error as EdgeError {
@@ -36,6 +40,8 @@ use segment::json_path::JsonPath;
 ///     val shard = EdgeShard.load(path = dataDir, config = null)
 /// } catch (e: EdgeException.ShardClosed) {
 ///     println("Shard is closed — reopen it first")
+/// } catch (e: EdgeException.ShardLocked) {
+///     println("Another handle has this shard open — retry or close it first")
 /// } catch (e: EdgeException.InvalidArgument) {
 ///     println("Bad input: ${e.reason}")
 /// } catch (e: EdgeException.OperationException) {
@@ -47,6 +53,15 @@ pub enum EdgeError {
     /// The shard has been unloaded/disposed; reopen it via `load` to continue.
     #[error("shard is closed")]
     ShardClosed,
+
+    /// Another live handle already holds this shard (its write-ahead log is
+    /// locked). This is an ordinary, recoverable condition — a second isolate,
+    /// a store the app forgot to close, a provider rebuilt — and is explicitly
+    /// *not* corruption: close the other handle (or retry) and the shard opens.
+    /// Only [`EdgeShard::load`](crate::EdgeShard::load) returns it. A probe
+    /// (`probe_shard`) never takes the lock, so it cannot report this state.
+    #[error("shard is already open by another handle")]
+    ShardLocked,
 
     /// Host-supplied input was invalid (bad UUID, out-of-range coordinate,
     /// malformed payload key/JSON, contradictory match filter, …). Fix the

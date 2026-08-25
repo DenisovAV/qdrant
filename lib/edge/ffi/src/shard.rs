@@ -4,12 +4,14 @@
 //! Per-operation read methods live in [`crate::ops`], one file per operation;
 //! update construction and [`EdgeShard::update`] live in [`crate::update`].
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
 use parking_lot::RwLock;
-use segment::types::SegmentConfig;
+use segment::common::operation_error::OperationError;
+use segment::types::{Filter as SegmentFilter, SegmentConfig};
 use shard::files::{clear_data, move_data};
+use shard::operations::{CollectionUpdateOperations, point_ops};
 use shard::snapshots::snapshot_manifest::SnapshotManifest;
 
 use crate::config::{EdgeConfig, HnswIndexConfig, OptimizersConfig};
@@ -106,7 +108,8 @@ impl EdgeShard {
         let edge_config = config
             .map(SegmentConfig::from)
             .map(|sc| edge::EdgeConfig::from_segment_config(&sc));
-        let shard = edge::EdgeShard::load(&PathBuf::from(path), edge_config)?;
+        let shard = edge::EdgeShard::load(&PathBuf::from(path), edge_config)
+            .map_err(map_shard_load_error)?;
         Ok(Arc::new(Self {
             inner: RwLock::new(Some(shard)),
         }))
@@ -214,6 +217,34 @@ impl EdgeShard {
         }
         guard.take();
         Ok(())
+    }
+
+    /// Deletes every point in the shard, leaving it loaded, its configuration
+    /// and payload indexes intact, and immediately writable again.
+    ///
+    /// This is the named, discoverable form of the match-all delete idiom
+    /// (`update(UpdateOperation::deletePointsByFilter(filter: /* empty */))`):
+    /// an empty filter matches every point. Prefer it to deleting the shard
+    /// directory when you want to reset a store's contents — the shard stays
+    /// open, so there is no reopen, no config to rebuild from scratch, and no
+    /// directory handling to get wrong. To discard a store *and* its files,
+    /// unload the shard and remove its directory instead.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`EdgeError::ShardClosed`] if the shard is unloaded, or
+    /// [`EdgeError::OperationError`] if the delete fails to apply or persist.
+    pub fn clear(&self) -> Result<()> {
+        self.with_shard(|shard| {
+            // A default (all-`None`) filter matches every point; the engine
+            // records the delete in the WAL and applies it to the segments,
+            // exactly as the `deletePointsByFilter(<empty>)` idiom does.
+            let op = CollectionUpdateOperations::PointOperation(
+                point_ops::PointOperations::DeletePointsByFilter(SegmentFilter::default()),
+            );
+            shard.update(op)?;
+            Ok(())
+        })
     }
 
     /// Returns the segment configuration the shard was loaded or created
@@ -397,4 +428,172 @@ impl EdgeShard {
 pub fn unpack_snapshot(snapshot_path: String, target_path: String) -> Result<()> {
     edge::EdgeShard::unpack_snapshot(&PathBuf::from(snapshot_path), &PathBuf::from(target_path))?;
     Ok(())
+}
+
+/// Maps the engine's shard-load error to the FFI error type, translating the
+/// one recoverable, expected failure — the shard's WAL is already held by
+/// another live handle — into a distinct [`EdgeError::ShardLocked`] so a
+/// consumer can retry or report "already open" without substring-matching a
+/// message itself.
+///
+/// The WAL takes an advisory `flock` on `<path>/wal` at open; a second handle
+/// fails with `io::ErrorKind::WouldBlock`, which the `wal` crate stringifies as
+/// `"Can't init WAL: Kind(WouldBlock)"` before it reaches this boundary — the
+/// error *kind* is lost to a string there, so this is the one place we must
+/// match on the message. The `load_of_locked_shard_reports_shard_locked`
+/// integration test pins the format so a future `wal` change can't silently
+/// demote this back to a generic `OperationError`.
+fn map_shard_load_error(err: OperationError) -> EdgeError {
+    let msg = err.to_string();
+    if msg.contains("Can't init WAL") && msg.contains("WouldBlock") {
+        return EdgeError::ShardLocked;
+    }
+    EdgeError::from(err)
+}
+
+/// What [`probe_shard`] found at a path — whether a shard is there and, if so,
+/// whether it would load.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, uniffi::Enum)]
+pub enum EdgeShardPresence {
+    /// The path is absent, empty, or holds nothing this crate wrote. Opening it
+    /// requires a config: `EdgeShard::load(path, Some(config))` starts fresh.
+    None,
+    /// A shard is present and structurally loadable — it has at least one
+    /// complete segment, or a readable `edge_config.json`. `load(path, None)`
+    /// is expected to succeed.
+    ///
+    /// NOTE: a probe never acquires the WAL lock, so a shard that is currently
+    /// open by *another* handle still reports `Loadable`; the subsequent `load`
+    /// is what surfaces [`EdgeError::ShardLocked`].
+    Loadable,
+    /// Shard data is present but `load` would fail: a corrupt `edge_config.json`,
+    /// or a shard directory with neither a complete segment nor a config. See
+    /// [`ShardProbe::reason`].
+    Unreadable,
+}
+
+/// The result of [`probe_shard`]: what is at a path and, when it will not load,
+/// a human-readable reason.
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct ShardProbe {
+    /// Classification of what is on disk at the probed path.
+    pub presence: EdgeShardPresence,
+    /// Explanation of an [`EdgeShardPresence::Unreadable`] result; `None` for
+    /// `None`/`Loadable`.
+    pub reason: Option<String>,
+}
+
+/// On-disk segment completeness marker written by the `segment` crate — kept in
+/// sync with `common::storage_version::VERSION_FILE` (a stable on-disk-format
+/// constant). A segment directory without it is incomplete and is skipped by
+/// the loader, so a probe must require it to call a segment "loadable". The
+/// `probe_reports_loadable_for_config_deleted_shard` integration test exercises
+/// the real segment-writing path, so a drift in this name fails there.
+const SEGMENT_VERSION_FILE: &str = "version.info";
+
+/// Inspects the shard directory at `path` and reports whether it holds a
+/// loadable shard — WITHOUT opening the engine, acquiring the WAL lock, or
+/// mutating anything on disk.
+///
+/// This answers the question [`EdgeShard::load`] cannot answer without side
+/// effects: *"is there a store here, and would it open?"* A consumer that wants
+/// "open the existing store, else start fresh" can branch on the result instead
+/// of reverse-engineering the on-disk layout:
+///
+/// - [`EdgeShardPresence::None`] — nothing of ours here; create a new shard.
+/// - [`EdgeShardPresence::Loadable`] — `load(path, None)` is expected to
+///   succeed. It still may fail with [`EdgeError::ShardLocked`] if another
+///   handle currently holds the shard — a probe never touches the WAL lock, so
+///   it cannot detect that.
+/// - [`EdgeShardPresence::Unreadable`] — data is present but will not load
+///   (e.g. a corrupt `edge_config.json`); the reason explains what.
+///
+/// Because it only reads the filesystem, it is safe to call before deciding to
+/// open, and while another handle has the shard open. It inspects structure,
+/// not deep segment integrity: a segment marked complete but internally damaged
+/// reports `Loadable`, and the eventual `load` surfaces the failure.
+#[uniffi::export]
+pub fn probe_shard(path: String) -> ShardProbe {
+    let path = PathBuf::from(path);
+
+    // Absent, or a non-directory (a stray file sitting at this path): nothing
+    // of ours here.
+    if !path.is_dir() {
+        return ShardProbe {
+            presence: EdgeShardPresence::None,
+            reason: None,
+        };
+    }
+
+    let segments_dir = shard::files::segments_path(&path);
+    let wal_dir = shard::files::wal_path(&path);
+
+    // Read `edge_config.json` without the WAL lock: `EdgeConfig::load` joins the
+    // file name itself and returns None (absent) / Some(Err) (corrupt) /
+    // Some(Ok) (valid).
+    let config = edge::EdgeConfig::load(&path);
+    let config_corrupt_reason = match &config {
+        Some(Err(e)) => Some(e.to_string()),
+        _ => None,
+    };
+    let config_present = config.is_some();
+
+    let has_complete_segment = dir_has_complete_segment(&segments_dir);
+    let markers_present = config_present || segments_dir.is_dir() || wal_dir.is_dir();
+
+    // Nothing this crate wrote: an empty directory or unrelated files.
+    if !markers_present {
+        return ShardProbe {
+            presence: EdgeShardPresence::None,
+            reason: None,
+        };
+    }
+
+    // A corrupt config hard-fails `load` even when segments are present (the
+    // loader reads and requires it before it would fall back to a
+    // segment-derived config), so it dominates the classification.
+    if let Some(reason) = config_corrupt_reason {
+        return ShardProbe {
+            presence: EdgeShardPresence::Unreadable,
+            reason: Some(format!(
+                "edge_config.json is present but could not be read: {reason}"
+            )),
+        };
+    }
+
+    // A complete segment (the config-deleted-but-segments-intact case) or a
+    // readable config (an empty shard the loader re-materialises) both load.
+    if has_complete_segment || config_present {
+        return ShardProbe {
+            presence: EdgeShardPresence::Loadable,
+            reason: None,
+        };
+    }
+
+    // Our directory skeleton is here (a `wal/` and/or an empty `segments/`) but
+    // there is neither a complete segment nor a config, so `load(path, None)`
+    // would fail with "no config and no segments". Report it as
+    // present-but-unreadable rather than pretend there is nothing here.
+    ShardProbe {
+        presence: EdgeShardPresence::Unreadable,
+        reason: Some(
+            "shard directory is present but incomplete: no complete segment and no edge_config.json"
+                .to_string(),
+        ),
+    }
+}
+
+/// True if `segments_dir` holds at least one subdirectory carrying the segment
+/// completeness marker — the same validity test the loader applies. Purely
+/// read-only: unlike the loader's `scan_segment_dirs`, it never deletes
+/// incomplete dirs or renames anything, so it is safe on a shard another handle
+/// has open.
+fn dir_has_complete_segment(segments_dir: &Path) -> bool {
+    let Ok(entries) = fs_err::read_dir(segments_dir) else {
+        return false;
+    };
+    entries.flatten().any(|entry| {
+        let seg = entry.path();
+        seg.is_dir() && seg.join(SEGMENT_VERSION_FILE).is_file()
+    })
 }

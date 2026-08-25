@@ -12,7 +12,8 @@ use qdrant_edge_ffi::error::EdgeError;
 use qdrant_edge_ffi::types::{NamedVector, Point, PointId, Vector, WithPayload, WithVector};
 use qdrant_edge_ffi::update::UpdateOperation;
 use qdrant_edge_ffi::{
-    CountRequest, EdgeShard, Query, RetrieveRequest, ScrollRequest, SearchRequest,
+    CountRequest, EdgeShard, EdgeShardPresence, Query, RetrieveRequest, ScrollRequest,
+    SearchRequest, probe_shard,
 };
 
 // ── Shared helpers ────────────────────────────────────────────────────────────
@@ -4328,4 +4329,179 @@ fn text_index_with_params_filters_with_stopwords() {
     // "point" is in the custom stopword set: it was never indexed, so no
     // point matches even though every title contains it.
     assert_eq!(count_matching("point"), 0);
+}
+
+// ── SDK-gap coverage: probe (§1), ShardLocked (§3), clear (§4) ─────────────────
+//
+// Each mirrors a scratch-directory reproduction reported by a consumer building
+// on the SDK. §1 covers all four rows of the load-ambiguity table; the third
+// row (config deleted, segments intact) is the one that cost a release, so it
+// asserts both the probe result AND that a real `load` agrees with it.
+
+/// §1 row 1 — an empty directory has no shard.
+#[test]
+fn probe_reports_none_for_empty_dir() {
+    let dir = tempfile::tempdir().expect("tempdir");
+    let probe = probe_shard(dir.path().to_str().unwrap().to_string());
+    assert_eq!(probe.presence, EdgeShardPresence::None);
+    assert!(probe.reason.is_none());
+}
+
+/// §1 — an absent path (nothing on disk at all) has no shard.
+#[test]
+fn probe_reports_none_for_absent_path() {
+    let dir = tempfile::tempdir().expect("tempdir");
+    let missing = dir.path().join("does-not-exist");
+    let probe = probe_shard(missing.to_str().unwrap().to_string());
+    assert_eq!(probe.presence, EdgeShardPresence::None);
+}
+
+/// §1 row 2 — a directory of unrelated files is not our shard.
+#[test]
+fn probe_reports_none_for_unrelated_files() {
+    let dir = tempfile::tempdir().expect("tempdir");
+    fs_err::write(dir.path().join("hello.txt"), b"not ours").expect("write");
+    let probe = probe_shard(dir.path().to_str().unwrap().to_string());
+    assert_eq!(probe.presence, EdgeShardPresence::None);
+}
+
+/// §1 — a normally-persisted shard (config present) is loadable.
+#[test]
+fn probe_reports_loadable_for_persisted_shard() {
+    let dir = tempfile::tempdir().expect("tempdir");
+    let path = dir.path().to_str().unwrap().to_string();
+    {
+        let shard = EdgeShard::load(path.clone(), Some(make_config())).expect("load");
+        upsert_three(&shard);
+        shard.flush().expect("flush");
+        shard.unload().expect("unload");
+    }
+    let probe = probe_shard(path);
+    assert_eq!(probe.presence, EdgeShardPresence::Loadable);
+    assert!(probe.reason.is_none());
+}
+
+/// §1 row 3 (THE one that cost a release) — `edge_config.json` deleted but
+/// `segments/` intact: the shard is still loadable, and probe must say so.
+/// This also doubles as the guard that `SEGMENT_VERSION_FILE` still matches the
+/// real segment-writing path (it runs a genuine load → write → persist).
+#[test]
+fn probe_reports_loadable_for_config_deleted_shard() {
+    let dir = tempfile::tempdir().expect("tempdir");
+    let path = dir.path().to_str().unwrap().to_string();
+    {
+        let shard = EdgeShard::load(path.clone(), Some(make_config())).expect("load");
+        upsert_three(&shard);
+        shard.flush().expect("flush");
+        shard.unload().expect("unload");
+    }
+    let cfg = dir.path().join("edge_config.json");
+    assert!(
+        cfg.exists(),
+        "edge_config.json should exist after a real load"
+    );
+    fs_err::remove_file(&cfg).expect("remove edge_config.json");
+
+    let probe = probe_shard(path.clone());
+    assert_eq!(
+        probe.presence,
+        EdgeShardPresence::Loadable,
+        "config deleted but segments present must be Loadable (reason: {:?})",
+        probe.reason,
+    );
+
+    // Prove probe told the truth: load succeeds and the data is intact.
+    let shard = EdgeShard::load(path, None).expect("reload after config deletion");
+    assert_eq!(shard.info().expect("info").points_count, 3);
+}
+
+/// §1 row 4 — a corrupt `edge_config.json` makes the shard unreadable (it
+/// hard-fails load even with segments present), with a human-readable reason.
+#[test]
+fn probe_reports_unreadable_for_corrupt_config() {
+    let dir = tempfile::tempdir().expect("tempdir");
+    let path = dir.path().to_str().unwrap().to_string();
+    {
+        let shard = EdgeShard::load(path.clone(), Some(make_config())).expect("load");
+        upsert_three(&shard);
+        shard.flush().expect("flush");
+        shard.unload().expect("unload");
+    }
+    fs_err::write(dir.path().join("edge_config.json"), b"{ this is not valid")
+        .expect("corrupt config");
+
+    let probe = probe_shard(path.clone());
+    assert_eq!(probe.presence, EdgeShardPresence::Unreadable);
+    assert!(
+        probe.reason.is_some(),
+        "an Unreadable probe must carry a reason",
+    );
+    // probe agrees with reality: load itself fails on the corrupt config.
+    assert!(EdgeShard::load(path, None).is_err());
+}
+
+/// §3 — a second load of a shard another handle already holds fails with the
+/// distinct `ShardLocked`, not a generic `OperationError`; and probe (which
+/// never takes the WAL lock) still reports the shard as structurally Loadable.
+#[test]
+fn load_of_locked_shard_reports_shard_locked() {
+    let dir = tempfile::tempdir().expect("tempdir");
+    let path = dir.path().to_str().unwrap().to_string();
+
+    // First handle holds the WAL flock for its lifetime (not unloaded).
+    let s1 = EdgeShard::load(path.clone(), Some(make_config())).expect("first load");
+    upsert_three(&s1);
+
+    // `Arc<EdgeShard>` is not Debug, so `let...else` instead of `expect_err`.
+    let Err(err) = EdgeShard::load(path.clone(), None) else {
+        panic!("second load must fail while the first handle holds the shard");
+    };
+    assert!(
+        matches!(err, EdgeError::ShardLocked),
+        "expected ShardLocked, got {err:?}",
+    );
+
+    // A probe must NOT detect the lock — it reports structural loadability only.
+    let probe = probe_shard(path);
+    assert_eq!(probe.presence, EdgeShardPresence::Loadable);
+
+    s1.unload().expect("unload");
+}
+
+/// §4 — `clear()` deletes every point, leaves the shard writable, and the empty
+/// state persists across a reload.
+#[test]
+fn clear_deletes_all_points_and_keeps_shard_writable() {
+    let dir = tempfile::tempdir().expect("tempdir");
+    let path = dir.path().to_str().unwrap().to_string();
+    let count = |shard: &EdgeShard| {
+        shard
+            .count(CountRequest {
+                filter: None,
+                exact: true,
+            })
+            .expect("count")
+    };
+
+    let shard = EdgeShard::load(path.clone(), Some(make_config())).expect("load");
+    upsert_three(&shard);
+    assert_eq!(count(&shard), 3);
+
+    shard.clear().expect("clear");
+    assert_eq!(count(&shard), 0, "clear() must remove every point");
+
+    // Still writable after clear.
+    upsert_three(&shard);
+    assert_eq!(count(&shard), 3, "shard must stay writable after clear()");
+
+    // Empty state persists across reload.
+    shard.clear().expect("clear again");
+    shard.flush().expect("flush");
+    shard.unload().expect("unload");
+    let reopened = EdgeShard::load(path, None).expect("reopen");
+    assert_eq!(
+        reopened.info().expect("info").points_count,
+        0,
+        "clear() must persist",
+    );
 }

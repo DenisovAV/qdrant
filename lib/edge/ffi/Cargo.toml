@@ -55,6 +55,10 @@ parking_lot = { workspace = true }
 serde_json = { workspace = true }
 ordered-float = { workspace = true }
 tempfile = { workspace = true }
+# `probe_shard` enumerates the segments directory; the workspace bans bare
+# `std::fs` (clippy `disallowed_methods`) in favour of `fs_err` for path-bearing
+# I/O error messages.
+fs-err = { workspace = true }
 
 [build-dependencies]
 uniffi = { version = "0.32", features = ["build"] }

@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.8.0-dev.3
+
+Consumer-driven DX fixes for opening, distinguishing, and clearing shards. All
+additive — no change to existing `load`/`search`/`update`/filter semantics.
+
+- **`probeShard(path:)`** — classify a directory as `none` / `loadable` /
+  `unreadable` (with a reason) *before* opening it, without taking the WAL lock.
+  It answers "is there a store here, and would it open?" so consumers no longer
+  reverse-engineer the on-disk layout. In particular, a shard whose
+  `edge_config.json` is missing but whose segments are intact now reports
+  `loadable` (it reopens fine) — removing the "full corpus seen as empty" class
+  of bugs.
+- **`ShardLockedEdgeException`** — opening a shard another handle already holds
+  now throws this distinct, recoverable exception instead of a generic
+  `OperationExceptionEdgeException`, so callers can retry or report "already
+  open" without substring-matching a message.
+- **`EdgeShard.clear()`** — deletes every point in place (the shard stays open,
+  its config and indexes intact); the discoverable form of the match-all
+  `deletePointsByFilter(Filter())` idiom.
+- **Exception guarantee**: `UniffiInternalError` is now exported, so every
+  exception crossing the API is catchable by name — an `EdgeException`
+  (domain/engine error) or `UniffiInternalError` (a Rust panic or bindings/native
+  protocol mismatch). Documented under README "Error handling". The
+  previously-unexported top-level `unpackSnapshot` is exported too.
+- Re-cut of the `edge-dart-native-v0.8.0` prebuilts to carry the new FFI symbols
+  (checksums updated).
+
 ## 0.8.0-dev.2
 
 - Fix: normalize the iOS native binary's minimum OS version to 13.0 to avoid

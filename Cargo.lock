@@ -5990,6 +5990,7 @@ version = "0.8.0"
 dependencies = [
  "ahash",
  "edge",
+ "fs-err",
  "ordered-float 5.3.0",
  "parking_lot",
  "segment",

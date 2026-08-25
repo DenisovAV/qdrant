@@ -34,5 +34,5 @@ pub use crate::payload_index::{
     KeywordIndexParams, Language, PayloadIndexInfo, PayloadIndexParams, SnowballLanguage, Stemmer,
     Stopwords, TextIndexParams, TokenizerType, UuidIndexParams,
 };
-pub use crate::shard::{EdgeShard, unpack_snapshot};
+pub use crate::shard::{EdgeShard, EdgeShardPresence, ShardProbe, probe_shard, unpack_snapshot};
 pub use crate::update::{PayloadSchemaType, UpdateMode, UpdateOperation};
