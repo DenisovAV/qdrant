@@ -38,21 +38,21 @@ const _releaseBase =
 /// release is cut; download provisioning is inert until then.
 const _sha256 = <String, String>{
   'linux_x86_64':
-      '10d6447556e4a99f0198f2680a9185b05efb4e4944631639fc397248e06ea534',
+      'b235fa9f6e1e5a09a6c30f0c18fcc2ce524a18b7785494b341668b6dc68e798c',
   'linux_arm64':
-      'b7cfb68e79acc19e7126264591750ef8d459a85df063a11917b2614246e075bc',
+      '256fa088ca7be9b0e9a5a08797078577302e1dd302d246b620abcc13fa9db0b6',
   'windows_x86_64':
-      'a703588c4693248122e32f9908523ce93dc61ecc0f04cc909e65edb2a5dd9060',
+      '868b0b1e3b7ffaf517a1e225be67c1022e4ed02047f96052a10c9455e06fd9c2',
   'macos_arm64':
-      '7918748cc4654d615907158486f33c401f08098e696a97483e8053712fec067a',
+      'ed761d34e5ce612da0164263a91594c67dc6a0e2119d337d652cb6d8e6828315',
   'ios_arm64':
-      'c7d3d630554b1bdc620eb53140f1e84de7b378777d3e41e460fdb86a4719a11b',
+      '6fbcb612d9b3ed30645eb4df7e3b4b681eaf0c2f749e8920e2b2edcede312df3',
   'ios_sim_arm64':
-      '0bce73518feb6f4d4ddff354a17b3e8ba5e29b21fa2769d5ef072987612a9a84',
+      'db4ec3e8da81fac489c2315f7d6def5daf4786bc4f1aa112b9b66e3c633b896c',
   'android_arm64':
-      '351e84c417017dd2663f7c74c8b0eab3d390beafc17f2f7f7e9b700d860d4cbd',
+      'c16f1c4de895bda0124118f26a13e329cdd132c070f1ec8fcb9b6afc415dc605',
   'android_x86_64':
-      '977c94754fb9afc3656e5b96e85381699f563e1f01e024bac94e334c3da49537',
+      '2eb0570e5ce1a0e6cfed8744047195291c38b7d1f09da9392f4cd72b5c3c8792',
 };
 
 void main(List<String> args) async {
