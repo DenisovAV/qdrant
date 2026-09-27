@@ -1,5 +1,46 @@
 # Changelog
 
+## 0.8.0-dev.4
+
+**Upgrade if you use 0.8.0-dev.1, 0.8.0-dev.2 or 0.8.0-dev.3.** Those versions
+leak native memory on almost every call: the process grows with use and the
+memory comes back only when it exits. Stored data is not affected. To fix it,
+change the dependency to `qdrant_edge: 0.8.0-dev.4`; no code changes are needed.
+The public API and the native libraries (`edge-dart-native-v0.8.0`) are the
+same as in 0.8.0-dev.3.
+
+What leaked:
+
+- **Results and typed errors.** Every call that returns a record, list or
+  string (`search`, `query`, `queryBatch`, `queryGroups`, `retrieve`,
+  `scroll`, `facet`, `info`, `config`, `path`, `snapshotManifest`,
+  `probeShard`), and every `EdgeException`, left its serialized result in
+  Rust-owned memory that the Dart GC cannot see. The leak grows with the size
+  of the result.
+- **Arguments.** Every call taking a record, list, string or optional argument
+  (requests, points, filters, configs) left the native copy made while
+  converting it.
+- **Nested enums.** Queries using `SampleScoringQuery`, and text indexes with a
+  `stemmer` or `stopwords` setting (when created or read back, for example
+  through `info()`), also allocated a small Rust buffer per conversion that was
+  never freed.
+
+Measured on macOS arm64, process RSS after 20,000 searches (limit 10, returning
+128-dim vectors and 211-byte JSON payloads, 2,000 points, after 2,000
+warm-up searches), two runs each:
+0.8.0-dev.3 grew by 590,217,216 and 590,299,136 bytes (29,511 and 29,515 bytes
+per search); 0.8.0-dev.4 grew by 163,840 and 409,600 bytes.
+
+The fixes come from the uniffi-dart generator (Uniffi-Dart/uniffi-dart#179,
+#180 and #182, still open upstream), applied to the generator fork this package
+uses; the binding is regenerated with them.
+
+Known issue, not fixed here (present since 0.8.0-dev.1): if converting an
+argument throws in Dart, for example `search` with a negative `limit`, the
+shard reference taken for that call is never released, so the shard keeps its
+file lock after `dispose()` and reopening it throws `ShardLockedEdgeException`
+until the process exits. `unload()` still releases the lock.
+
 ## 0.8.0-dev.3
 
 Consumer-driven DX fixes for opening, distinguishing, and clearing shards. All

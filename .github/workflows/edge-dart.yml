@@ -38,8 +38,8 @@ env:
   # Pinned to a REVIEWED COMMIT, not the mutable `library-mode-cli` branch, so a
   # branch update can't silently change the generated binding this CI builds.
   UNIFFI_DART_REPO: https://github.com/DenisovAV/uniffi-dart.git
-  # library-mode-cli @ 8b63861 (bump when intentionally adopting fork changes)
-  UNIFFI_DART_REF: 8b63861b9a10ac0fc8f25047a4f79bcde955731d
+  # edge-leak-fixes @ 1ce58d0: library-mode-cli + upstream #179/#180/#182 buffer-ownership fixes
+  UNIFFI_DART_REF: 1ce58d05e114f03f85a26d8521a0822ac2682321
 
 jobs:
   edge-dart:

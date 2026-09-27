@@ -106,7 +106,7 @@ WAL lock. (`probe` never detects the lock, so a `loadable` shard can still throw
   [#149](https://github.com/Uniffi-Dart/uniffi-dart/pull/149) /
   [#151](https://github.com/Uniffi-Dart/uniffi-dart/pull/151) /
   [#152](https://github.com/Uniffi-Dart/uniffi-dart/pull/152)):
-  `github.com/DenisovAV/uniffi-dart` @ `library-mode-cli`. Point
+  `github.com/DenisovAV/uniffi-dart` @ `edge-leak-fixes`. Point
   `UNIFFI_BINDGEN_DART` at that build. CI regenerates the binding and diffs the
   committed **facade** to guarantee the public surface stays in sync with the
   crate (the binding itself can't drift — it is always regenerated, never stored).

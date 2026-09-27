@@ -18,7 +18,7 @@
 #
 # The `uniffi_bindgen_dart` CLI must be built from the FORK that carries the
 # uniffi-0.32 + library-mode-CLI + collision-fix work (upstream lacks them):
-#   github.com/DenisovAV/uniffi-dart @ branch `library-mode-cli`
+#   github.com/DenisovAV/uniffi-dart @ branch `edge-leak-fixes`
 # Point UNIFFI_BINDGEN_DART at that build, or install it and put it on PATH.
 set -euo pipefail
 
