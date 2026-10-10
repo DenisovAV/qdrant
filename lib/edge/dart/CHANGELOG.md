@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.8.0-dev.5
+
+Allow `code_assets` 2.x: the constraint widens from `^1.2.0` to
+`">=1.2.0 <3.0.0"`. This lets an app resolve when something else in its
+dependency graph needs `code_assets ^2.0.0` (for example `native_toolchain_c`
+≥0.19.4, `objective_c` ≥9.6.0, `ffigen` ≥22, or `flutter_soloud` 5.x), while
+still installing on Flutter 3.44 (where `meta` is pinned to 1.18.0 and pub
+picks `code_assets` 1.2.x). No code, API or native-library changes — the
+prebuilt binaries remain `edge-dart-native-v0.8.0`.
+
 ## 0.8.0-dev.4
 
 **Upgrade if you use 0.8.0-dev.1, 0.8.0-dev.2 or 0.8.0-dev.3.** Those versions
